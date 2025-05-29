@@ -1,332 +1,839 @@
-function updateDateTime() {
-    const now = new Date();
-    const options = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
+
+  const menuItems = document.querySelectorAll(".menu");
+  const sections = document.querySelectorAll(".content-section");
+
+  menuItems.forEach(item => {
+    item.addEventListener("click", () => {
+      // Remove active class from all menu items
+      menuItems.forEach(i => i.classList.remove("active"));
+
+      // Add active class to clicked menu
+      item.classList.add("active");
+
+      // Hide all sections
+      sections.forEach(section => section.classList.add("d-none"));
+
+      // Show the selected section
+      const target = item.getAttribute("data-section");
+      document.getElementById(target).classList.remove("d-none");
+    });
+  });
+
+
+
+
+  // Modal open logic with patient ID and reg date autofill
+  document.querySelector(".add_button").addEventListener("click", () => {
+
+    // Auto-fill patient ID and date
+    document.getElementById("patientId").value = "PT-" + Date.now();
+    document.getElementById("regDate").value = new Date().toLocaleDateString();
+  });
+
+  // Age calculation from DOB
+  document.getElementById("dob").addEventListener("change", function () {
+    const dob = new Date(this.value);
+    const diff = Date.now() - dob.getTime();
+    const age = new Date(diff).getUTCFullYear() - 1970;
+    document.getElementById("age").value = isNaN(age) ? '' : age;
+  });
+
+  // Form step navigation
+  let currentStep = 1;
+  const steps = document.querySelectorAll(".step");
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const saveBtn = document.getElementById("saveBtn");
+
+  function showStep(step) {
+    steps.forEach((el, idx) => {
+      el.classList.toggle("d-none", idx !== step - 1);
+    });
+    prevBtn.classList.toggle("d-none", step === 1);
+    nextBtn.classList.toggle("d-none", step === steps.length);
+    saveBtn.classList.toggle("d-none", step !== steps.length);
+
+    // Tab indicators (optional)
+    document.getElementById("step1-tab")?.classList.toggle("active", step === 1);
+    document.getElementById("step2-tab")?.classList.toggle("active", step === 2);
+    document.getElementById("step3-tab")?.classList.toggle("active", step === 3);
+  }
+
+  nextBtn.addEventListener("click", () => {
+    if (currentStep < steps.length) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  });
+
+  prevBtn.addEventListener("click", () => {
+    if (currentStep > 1) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  });
+
+  showStep(currentStep);
+
+  // Dropdown + input + condition tags logic
+function setupConditionLogic(selectId, inputId, containerClass, hiddenInputId = null) {
+  const select = document.getElementById(selectId);
+  const input = document.getElementById(inputId);
+  const container = document.querySelector("." + containerClass);
+  const hiddenInput = hiddenInputId ? document.getElementById(hiddenInputId) : null;
+  const added = new Set();
+
+  function updateHiddenConditions() {
+    const allValues = [...container.children].map(tag => tag.dataset.value);
+    if (hiddenInput) {
+      hiddenInput.value = allValues.join(",");
+    }
+  }
+
+  function addCondition(value) {
+    const trimmedValue = value.trim();
+    const normalized = trimmedValue.toLowerCase();
+    const exists = [...container.children].some(
+      tag => tag.dataset.value.toLowerCase() === normalized
+    );
+    if (!trimmedValue || exists) return;
+
+    const tag = document.createElement("span");
+    tag.className = "badge d-flex align-items-center";
+    tag.style.paddingRight = "0.5rem";
+    tag.style.backgroundColor = "#0077b6";
+    tag.dataset.value = trimmedValue;
+    tag.innerHTML = `
+      ${trimmedValue}
+      <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove"></button>
+    `;
+
+    tag.querySelector("button").onclick = () => {
+      tag.remove();
+      added.delete(normalized);
+      updateHiddenConditions();
     };
-    document.getElementById('datetime').textContent = now.toLocaleDateString('en-US', options);
+
+    container.appendChild(tag);
+    added.add(normalized);
+    updateHiddenConditions();
+  }
+
+  select?.addEventListener("change", () => {
+    addCondition(select.value);
+    select.selectedIndex = 0;
+  });
+
+  input?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && input.value.trim()) {
+      e.preventDefault();
+      addCondition(input.value);
+      input.value = "";
+    }
+  });
 }
 
-updateDateTime();
-setInterval(updateDateTime, 1000);
+// Call it for each modal
+setupConditionLogic("condition-select-1", "custom-condition-1", "condition-1", "conditionsHidden-1");
+setupConditionLogic("condition-select-2", "custom-condition-2", "condition-2", "conditionsHidden-2");
 
-// Logout functionality
-document.getElementById('logoutDiv').addEventListener('click', () => {
-    alert('Logging out...');
-    // Add your actual logout logic here
-});
 
-// Navigation functionality
-document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', function() {
-        // Remove active class from all
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-        
-        // Add active to clicked
-        this.classList.add('active');
-        const target = this.getAttribute('data-target');
-        document.getElementById(target).classList.add('active');
-    });
-});
-document.querySelector('.filter-toggle').addEventListener('click', function() {
-    document.querySelector('.filter-panel').classList.toggle('active');
-});
 
-// Add click event for breadcrumb items
-document.querySelectorAll('.breadcrumb-item').forEach(item => {
-    if (!item.classList.contains('active')) {
-        item.addEventListener('click', function() {
-            // Navigate to dashboard when clicked
-            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-            
-            document.querySelector('[data-target="dashboard"]').classList.add('active');
-            document.getElementById('dashboard').classList.add('active');
-        });
+
+
+
+  // Sample data for demonstration (add more fields as needed)
+  const patients = [
+    {
+      id: "PAT001",
+      regDate: "2025-05-20",
+      firstName: "John",
+      lastName: "Doe",
+      gender: "Male",
+      dob: "1990-01-01",
+      age: 35,
+      contact: "+91-9876543210",
+      emergencyContact: "+91-9123456789",
+      idProofUrl: "uploads/id_proof_john.pdf",
+      allergies: "Pollen",
+      existingConditions: "Diabetes",
+      surgeries: "Appendectomy",
+      dentalHistory: "Braces, Fillings",
+      insuranceProvider: "Max Bupa",
+      policyNumber: "POL123456",
+      insuranceValidity: "2026-12-31",
+      coverage: "Full",
+      consentGiven: true,
+      consentFormUrl: "uploads/consent_john.pdf",
+      bloodGroup: "B+",
+      specialNeeds: "None",
+      pregnantNursing: "No",
+      bleedingDisorders: "No",
+      smoking: "Occasionally"
     }
+  ];
+
+  // Open View Modal when table row is clicked
+  document.querySelectorAll("#patientsTableBody tr").forEach((row, index) => {
+    row.addEventListener("click", () => {
+      const p = patients[index];
+
+      document.getElementById("viewPatientId").textContent = p.id;
+      document.getElementById("viewName").textContent = `${p.firstName} ${p.lastName}`;
+      document.getElementById("viewGender").textContent = p.gender;
+      document.getElementById("viewAge").textContent = p.age;
+      document.getElementById("viewContact").textContent = p.contact;
+
+      document.getElementById("viewEmergencyContact").textContent = p.emergencyContact || "-";
+      document.getElementById("viewIdProofLink").href = p.idProofUrl || "#";
+
+      document.getElementById("viewAllergies").textContent = p.allergies || "-";
+      document.getElementById("viewConditions").textContent = p.existingConditions || "-";
+      document.getElementById("viewSurgeries").textContent = p.surgeries || "-";
+      document.getElementById("viewDentalHistory").textContent = p.dentalHistory || "-";
+
+      document.getElementById("viewInsuranceProvider").textContent = p.insuranceProvider || "-";
+      document.getElementById("viewPolicyNumber").textContent = p.policyNumber || "-";
+      document.getElementById("viewInsuranceValidity").textContent = p.insuranceValidity || "-";
+      document.getElementById("viewCoverage").textContent = p.coverage || "-";
+
+      document.getElementById("viewConsentCheckbox").textContent = p.consentGiven ? "Yes" : "No";
+      document.getElementById("viewConsentFileLink").href = p.consentFormUrl || "#";
+
+      document.getElementById("viewBloodGroup").textContent = p.bloodGroup || "-";
+      document.getElementById("viewSpecialNeeds").textContent = p.specialNeeds || "-";
+      document.getElementById("viewPregnantNursing").textContent = p.pregnantNursing || "-";
+      document.getElementById("viewBleedingDisorders").textContent = p.bleedingDisorders || "-";
+      document.getElementById("viewSmoking").textContent = p.smoking || "-";
+
+      const viewModal = new bootstrap.Modal(document.getElementById("viewPatientModal"));
+      viewModal.show();
+    });
+  });
+
+  // Open Edit Modal from View Modal
+  document.getElementById("openEditModalBtn").addEventListener("click", () => {
+    const viewModal = bootstrap.Modal.getInstance(document.getElementById("viewPatientModal"));
+    viewModal.hide();
+
+    const editModal = new bootstrap.Modal(document.getElementById("editPatientModal"));
+    const patientId = document.getElementById("viewPatientId").textContent;
+    document.getElementById("patientId").value = patientId;
+
+    // Populate other fields into the edit modal as needed...
+
+    editModal.show();
+  });
+
+
+  // Sample data for demonstration (add more fields as needed)
+  const appointments = [
+    {
+    appointmentId: "APT123",
+    patientName: "prabhu",
+    dateTime: "2025-05-27 10:30 AM",
+    preferredDentist: "Dr. Smith",
+    referral: "Friend",
+    department: "Orthodontics",
+    status: "Confirmed",
+    bookingSource: "Online",
+    createdBy: "Receptionist",
+    notes: "Patient prefers morning appointments"
+    }
+  ];
+
+  // Open View Modal when table row is clicked
+  document.querySelectorAll("#appointmentsTableBody  tr").forEach((row, index) => {
+    row.addEventListener("click", () => {
+      const a = appointments[index];
+
+     document.getElementById("viewAppointmentId").textContent = a.appointmentId || "-";
+     document.getElementById("viewPatientName").textContent = a.patientName || "-";
+document.getElementById("viewDateTime").textContent = a.dateTime || "-";
+document.getElementById("viewDentist").textContent = a.preferredDentist || "-";
+document.getElementById("viewReferal").textContent = a.referral || "-";
+document.getElementById("viewDepartment").textContent = a.department || "-";
+document.getElementById("viewStatus").textContent = a.status || "-";
+document.getElementById("viewSource").textContent = a.bookingSource || "-";
+document.getElementById("viewCreated").textContent = a.createdBy || "-";
+document.getElementById("viewNotes").textContent = a.notes || "-";
+
+
+      const viewModal = new bootstrap.Modal(document.getElementById("viewAppointmentModal"));
+      viewModal.show();
+    });
+  });
+
+
+
+ // Open Edit Modal from View Modal
+  document.getElementById("openAppointmentEditModalBtn").addEventListener("click", () => {
+    const viewModal = bootstrap.Modal.getInstance(document.getElementById("viewAppointmentModal"));
+    viewModal.hide();
+
+    const editModal = new bootstrap.Modal(document.getElementById("editAppointmentModal"));
+    const patientId = document.getElementById("viewPatientId").textContent;
+    document.getElementById("patientId").value = patientId;
+
+    // Populate other fields into the edit modal as needed...
+
+    editModal.show();
+  });
+
+
+  
+
+  //dentist js
+
+  const dentists = [
+  {
+    id: "DENT001",
+    registrationDate: "2024-10-15",
+    name: "Dr. Aarthi Mehta",
+    gender: "Female",
+    age: 42,
+    contact: "+91-9988776655",
+    email: "aarthi.dent@example.com",
+    idProofUrl: "uploads/id_aarthi.pdf",
+    councilNumber: "TN-D-56321",
+    availableDays: "Mon, Wed, Fri",
+    roomNumber: "203",
+    availableTime: "10:00 AM - 1:00 PM",
+    experience: "15 Years",
+    availability: "Available"
+  }
+];
+
+
+// Attach event to each row (assumes 1:1 mapping with dentist array)
+document.querySelectorAll("#dentistTable tr").forEach((row, index) => {
+  row.addEventListener("click", () => {
+    const d = dentists[index];
+
+    document.getElementById("viewDentistId").textContent = d.id;
+    document.getElementById("viewRegistrationDate").textContent = d.registrationDate;
+    document.getElementById("viewDentistName").textContent = d.name;
+    document.getElementById("viewDentistGender").textContent = d.gender;
+    document.getElementById("viewDentistAge").textContent = d.age;
+    document.getElementById("viewDentistContact").textContent = d.contact;
+    document.getElementById("viewDentistEmail").textContent = d.email;
+
+    document.getElementById("viewDentistIdProofLink").href = d.idProofUrl || "#";
+    document.getElementById("viewCouncilNumber").textContent = d.councilNumber || "-";
+    document.getElementById("viewAvailableDays").textContent = d.availableDays || "-";
+    document.getElementById("viewRoomNumber").textContent = d.roomNumber || "-";
+    document.getElementById("viewAvailableTime").textContent = d.availableTime || "-";
+    document.getElementById("viewExperience").textContent = d.experience || "-";
+
+    const viewDentistModal = new bootstrap.Modal(document.getElementById("viewDentistModal"));
+    viewDentistModal.show();
+  });
 });
 
-// Add New Patient button functionality
-document.querySelector('.add-patient-btn').addEventListener('click', function() {
-    alert('Add New Patient form will open here');
-    // Implement your add patient functionality here
-});
-// Add New Patient button functionality
-document.querySelector('.add-patient-btn').addEventListener('click', function() {
-    alert('Add New Patient form will open here');
-    // Implement your add patient functionality here
+
+ // Open Edit Modal from View Modal
+  document.getElementById("editDentistBtn").addEventListener("click", () => {
+    const viewModal = bootstrap.Modal.getInstance(document.getElementById("viewDentistModal"));
+    viewModal.hide();
+
+    const editModal = new bootstrap.Modal(document.getElementById("editDentistModal"));
+    const patientId = document.getElementById("viewPatientId").textContent;
+    document.getElementById("patientId").value = patientId;
+
+    // Populate other fields into the edit modal as needed...
+
+    editModal.show();
+  });
+
+
+
+  //billing js
+
+  const billing = [
+  {
+    invoiceId: "INV12345",
+    registrationDate: "2024-10-15",
+    patientId: "PAT001",
+    patientName: "John Doe",
+    appointmentId: "APT1001",
+    totalAmount: "₹5,000",
+    amountPaid: "₹4,000",
+    paymentMode: "Credit Card",
+    paymentStatus: "Partial",
+    insuranceClaim: "Claimed"
+  }
+];
+
+
+// Attach event to each row (assumes 1:1 mapping with dentist array)
+document.querySelectorAll("#billingTableBody tr").forEach((row, index) => {
+  row.addEventListener("click", () => {
+    const b = billing[index];
+
+   document.getElementById("viewInvoice").textContent = b.invoiceId|| "-";
+    document.getElementById("viewDate").textContent = b.registrationDate || "-";
+    document.getElementById("viewPatient").textContent = b.patientId || "-";
+    document.getElementById("viewPatientNames").textContent = b.patientName || "-";
+    document.getElementById("viewAppointment").textContent = b.appointmentId || "-";
+    document.getElementById("viewTotal").textContent = b.totalAmount || "-";
+    document.getElementById("viewPaid").textContent = b.amountPaid || "-";
+    document.getElementById("viewMode").textContent = b.paymentMode || "-";
+    document.getElementById("viewPaymentStatus").textContent = b.paymentStatus || "-";
+    document.getElementById("viewInsuranceClaim").textContent = b.insuranceClaim || "-";
+
+    const viewDentistModal = new bootstrap.Modal(document.getElementById("viewBillingModal"));
+    viewDentistModal.show();
+  });
 });
 
-// Sample filter functionality
-document.querySelector('.btn-primary').addEventListener('click', function() {
-    alert('Filters would be applied here in a real implementation');
+
+ // Open Edit Modal from View Modal
+  document.getElementById("openBillingEditModalBtn").addEventListener("click", () => {
+    const viewModal = bootstrap.Modal.getInstance(document.getElementById("viewBillingModal"));
+    viewModal.hide();
+
+    const editModal = new bootstrap.Modal(document.getElementById("editBillingModal"));
+
+
+    // Populate other fields into the edit modal as needed...
+
+    editModal.show();
+  });
+
+
+  //treatment js
+
+const treatments = [
+  {
+    treatmentId: "TRT-1023",
+    patientName: "John Doe",
+    dentistName: "Dr. Anita Sharma",
+    treatmentType: "Root Canal Therapy",
+    status: "Ongoing",
+    dateTime: "2025-05-27 10:30 AM",
+    appointmentId: "APPT001",
+    patientId: "PAT001",
+    dentistId: "DENT001",
+    bookedBy: "Receptionist",
+    diagnosis: "Severe infection in tooth #12",
+    prescription: "Amoxicillin 500mg",
+    reportsUrl: "uploads/report_trt1023.pdf",
+    followUp: "Yes - 1 week later",
+    toothNotes: "Tooth #12 cleaned and medicated",
+    nextVisit: "2025-06-03"
+  },
+  {
+    treatmentId: "TRT-1024",
+    patientName: "Emily Watson",
+    dentistName: "Dr. Raj Patel",
+    treatmentType: "Tooth Extraction",
+    status: "Completed",
+    dateTime: "2025-05-26 02:00 PM",
+    appointmentId: "APPT002",
+    patientId: "PAT002",
+    dentistId: "DENT002",
+    bookedBy: "Online Portal",
+    diagnosis: "Severe decay beyond restoration",
+    prescription: "Ibuprofen 400mg",
+    reportsUrl: "uploads/report_trt1024.pdf",
+    followUp: "None required",
+    toothNotes: "Tooth #18 extracted cleanly",
+    nextVisit: "-"
+  }
+];
+
+// Add event listeners to table rows to open the treatment modal
+document.querySelectorAll("#treatmentTable tr").forEach((row, index) => {
+  row.addEventListener("click", () => {
+    const t = treatments[index];
+
+    document.getElementById("viewTreatmentId").textContent = t.treatmentId;
+    document.getElementById("viewAppointmentId").textContent = t.appointmentId;
+    document.getElementById("viewPatientId").textContent = t.patientId;
+    document.getElementById("viewTreatmentDentistId").textContent = t.dentistId;
+    document.getElementById("viewBookedBy").textContent = t.bookedBy;
+    document.getElementById("viewTreatmentType").textContent = t.treatmentType;
+    document.getElementById("viewDiagnosis").textContent = t.diagnosis;
+    document.getElementById("viewPrescription").textContent = t.prescription;
+    document.getElementById("viewReportsLink").href = t.reportsUrl || "#";
+    document.getElementById("viewFollowUp").textContent = t.followUp || "-";
+    document.getElementById("viewToothNotes").textContent = t.toothNotes || "-";
+    document.getElementById("viewTreatmentStatus").textContent = t.status;
+    document.getElementById("viewNextVisit").textContent = t.nextVisit || "-";
+
+    const treatmentModal = new bootstrap.Modal(document.getElementById("viewTreatmentModal"));
+    treatmentModal.show();
+  });
 });
-document.addEventListener('DOMContentLoaded', function() {
-    const rows = document.querySelectorAll('.clickable-row');
-    rows.forEach(row => {
-        row.addEventListener('click', function() {
-            const patientId = this.getAttribute('data-patient-id');
-            // In a real app, you would fetch detailed data for this patientId
-            // Here we're just using the visible data plus some sample details
-            const cells = this.cells;
-            
-            // Update modal with basic info from the row
-            document.getElementById('modal-patient-id').textContent = cells[0].textContent;
-            document.getElementById('modal-patient-name').textContent = cells[1].textContent;
-            document.getElementById('modal-patient-gender').textContent = cells[2].textContent;
-            document.getElementById('modal-patient-age').textContent = cells[3].textContent;
-            document.getElementById('modal-patient-contact').textContent = cells[4].textContent;
-            document.getElementById('modal-patient-blood').textContent = cells[5].textContent;
-            document.getElementById('modal-patient-regdate').textContent = cells[6].textContent;
-            
-            // Sample additional data (in real app this would come from API)
-            const sampleData = {
-                "DENT-1001": {
-                    dob: "15-06-1988",
-                    email: "rajesh.kumar@example.com",
-                    insurance: "Active (Expires: 15-07-2024)",
-                    address: "123 Gandhi Street, Chennai - 600001",
-                    history: "Allergic to Penicillin. Root canal treatment in 2020."
-                },
-                "DENT-1002": {
-                    dob: "22-03-1995",
-                    email: "priya.sharma@example.com",
-                    insurance: "Active (Expires: 20-10-2023)",
-                    address: "456 Nehru Road, Bangalore - 560001",
-                    history: "No known allergies. Regular dental checkups."
-                },
-                // Add data for other patients...
-            };
-            
-            // Fill in the additional fields
-            const patientData = sampleData[patientId] || {};
-            document.getElementById('modal-patient-dob').textContent = patientData.dob || "Not available";
-            document.getElementById('modal-patient-email').textContent = patientData.email || "Not provided";
-            document.getElementById('modal-patient-insurance').textContent = patientData.insurance || "No insurance";
-            document.getElementById('modal-patient-address').textContent = patientData.address || "Address not provided";
-            document.getElementById('modal-patient-history').textContent = patientData.history || "No medical history recorded";
-        });
-    });
-});
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize modal
-    const addPatientModal = new bootstrap.Modal(document.getElementById('addPatientModal'));
-    
-    // Open modal when Add New Patient button is clicked
-    document.querySelector('.add-patient-btn').addEventListener('click', function() {
-        // Generate patient ID (in real app this would come from backend)
-        const today = new Date();
-        const patientId = `DENT-${today.getFullYear()}${(today.getMonth()+1).toString().padStart(2, '0')}${Math.floor(100 + Math.random() * 900)}`;
-        document.getElementById('patientId').value = patientId;
-        
-        // Set registration date to today
-        const regDate = `${today.getDate().toString().padStart(2, '0')}-${(today.getMonth()+1).toString().padStart(2, '0')}-${today.getFullYear()}`;
-        document.getElementById('regDate').value = regDate;
-        
-        // Reset form
-        resetForm();
-        addPatientModal.show();
-    });
-    
-    // DOB checkbox functionality
-    document.getElementById('dobCheckbox').addEventListener('change', function() {
-        const dobInput = document.getElementById('dob');
-        const ageInput = document.getElementById('age');
-        
-        dobInput.disabled = !this.checked;
-        ageInput.disabled = this.checked; // Disable age when DOB is enabled
-        
-        if (!this.checked) {
-            dobInput.value = '';
-        } else {
-            ageInput.value = '';
+
+//Edit Modal treatment tab
+  document.getElementById("editTreatmentBtn").addEventListener("click", () => {
+    const viewModal = bootstrap.Modal.getInstance(document.getElementById("viewTreatmentModal"));
+    viewModal.hide();
+
+    const editModal = new bootstrap.Modal(document.getElementById("editTreatmentModal"));
+    editModal.show();
+  });
+
+
+  // Tab Navigation
+  function showDashboardTab(tabName, event) {
+    document.querySelectorAll('.dashboard-tab-content').forEach(div => div.classList.add('d-none'));
+    document.querySelector('#tab-' + tabName).classList.remove('d-none');
+    document.querySelectorAll('#dashboardTabs .nav-link').forEach(link => link.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // Chart Configuration
+  const chartConfigs = {
+    overviewChart: {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'New Patients',
+          data: [120, 150, 180, 210, 240, 280],
+          borderColor: '#4e73df',
+          backgroundColor: 'rgba(78, 115, 223, 0.05)',
+          fill: true,
+          tension: 0.3
+        }, {
+          label: 'Returning Patients',
+          data: [80, 90, 110, 130, 150, 170],
+          borderColor: '#1cc88a',
+          backgroundColor: 'rgba(28, 200, 138, 0.05)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top'
+          }
         }
-    });
-    
-    // Age checkbox functionality
-    document.getElementById('ageCheckbox').addEventListener('change', function() {
-        const ageInput = document.getElementById('age');
-        ageInput.disabled = !this.checked;
-        if (!this.checked) {
-            ageInput.value = '';
+      }
+    },
+    overviewAppointmentsChart: {
+      type: 'doughnut',
+      data: {
+        labels: ['Completed', 'Cancelled', 'Rescheduled', 'No Show'],
+        datasets: [{
+          data: [100, 50, 10, 6],
+          backgroundColor: ['#1cc88a', '#e74a3b', '#f6c23e', '#858796']
+        }]
+      },
+      options: {
+        cutout: '30%',
+        plugins: {
+          legend: {
+            position: 'right'
+          }
         }
-    });
-    
-    // Calculate age from DOB
-    document.getElementById('dob').addEventListener('change', function() {
-        if (this.value && document.getElementById('dobCheckbox').checked) {
-            const dob = new Date(this.value);
-            const today = new Date();
-            let age = today.getFullYear() - dob.getFullYear();
-            const monthDiff = today.getMonth() - dob.getMonth();
-            
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-                age--;
+      }
+    },
+    genderChart: {
+      type: 'pie',
+      data: {
+        labels: ['Male', 'Female', 'Other'],
+        datasets: [{
+          data: [45, 52, 3],
+          backgroundColor: ['#36b9cc', '#1cc88a', '#f6c23e']
+        }]
+      },
+      options: {
+        cutout: '30%',
+        plugins: {
+          legend: {
+            position: 'right'
+          }
+        }
+      }
+    },
+    ageGroupChart: {
+      type: 'bar',
+      data: {
+        labels: ['0-18', '19-35', '36-50', '51+'],
+        datasets: [{
+          label: 'Patients',
+          data: [120, 580, 320, 228],
+          backgroundColor: '#4e73df'
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    },
+    newPatientsChart: {
+      type: 'line',
+      data: {
+        labels: Array.from({length: 30}, (_, i) => i+1),
+        datasets: [{
+          label: 'New Patients',
+          data: Array.from({length: 30}, () => Math.floor(Math.random() * 10) + 2),
+          borderColor: '#4e73df',
+          backgroundColor: 'rgba(78, 115, 223, 0.05)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Day of Month'
             }
-            document.getElementById('age').value = age;
-        }
-    });
-    
-    // Sample existing conditions
-    const sampleConditions = [
-        "Diabetes", "Hypertension", "Asthma", "Heart Disease", 
-        "Allergy to Penicillin", "Arthritis", "Epilepsy", "Thyroid Disorder"
-    ];
-    
-    // Condition search functionality
-    const conditionSearch = document.getElementById('conditionSearch');
-    const conditionsList = document.getElementById('conditionsList');
-    const selectedConditions = document.getElementById('selectedConditions');
-    
-    conditionSearch.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        if (searchTerm) {
-            conditionsList.innerHTML = '';
-            const filtered = sampleConditions.filter(cond => 
-                cond.toLowerCase().includes(searchTerm)
-                && !Array.from(selectedConditions.children).some(el => 
-                    el.textContent.includes(cond)));
-            
-            if (filtered.length > 0) {
-                filtered.forEach(cond => {
-                    const item = document.createElement('div');
-                    item.className = 'dropdown-item';
-                    item.textContent = cond;
-                    item.addEventListener('click', function() {
-                        addCondition(cond);
-                        conditionsList.style.display = 'none';
-                        conditionSearch.value = '';
-                    });
-                    conditionsList.appendChild(item);
-                });
-                conditionsList.style.display = 'block';
-            } else {
-                conditionsList.style.display = 'none';
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'New Patients'
             }
-        } else {
-            conditionsList.style.display = 'none';
+          }
         }
-    });
-    
-    // Add new condition
-    document.getElementById('addCondition').addEventListener('click', function() {
-        const newCondition = conditionSearch.value.trim();
-        if (newCondition && !Array.from(selectedConditions.children).some(el => 
-            el.textContent.includes(newCondition))) {
-            addCondition(newCondition);
-            conditionSearch.value = '';
-            conditionsList.style.display = 'none';
+      }
+    },
+    appointmentTrendsChart: {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        datasets: [{
+          label: 'Appointments',
+          data: [18, 22, 19, 25, 21, 12],
+          borderColor: '#4e73df',
+          backgroundColor: 'rgba(78, 115, 223, 0.05)',
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          }
         }
-    });
-    
-    function addCondition(condition) {
-        const tag = document.createElement('div');
-        tag.className = 'condition-tag';
-        tag.innerHTML = `${condition} <span class="remove-condition">&times;</span>`;
-        tag.querySelector('.remove-condition').addEventListener('click', function() {
-            tag.remove();
-        });
-        selectedConditions.appendChild(tag);
-    }
-    
-    // Multi-step form navigation
-    const steps = document.querySelectorAll('.step');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const saveBtn = document.getElementById('saveBtn');
-let currentStep = 0;
-
-// Initialize modal steps
-function showStep(stepIndex) {
-    steps.forEach((step, index) => {
-        step.classList.toggle('active', index === stepIndex);
-    });
-    
-    // Update button visibility
-    prevBtn.style.display = stepIndex === 0 ? 'none' : 'block';
-    nextBtn.style.display = stepIndex === steps.length - 1 ? 'none' : 'block';
-    saveBtn.style.display = stepIndex === steps.length - 1 ? 'block' : 'none';
-}
-
-nextBtn.addEventListener('click', function() {
-    if (validateStep(currentStep)) {
-        currentStep++;
-        showStep(currentStep);
-    }
-});
-
-prevBtn.addEventListener('click', function() {
-    currentStep--;
-    showStep(currentStep);
-});
-
-// Initialize first step
-showStep(0);
-    
-    function updateButtons() {
-        if (currentStep === 0) {
-            prevBtn.style.display = 'none';
-            nextBtn.style.display = 'block';
-            saveBtn.style.display = 'none';
-        } else if (currentStep === steps.length - 1) {
-            prevBtn.style.display = 'block';
-            nextBtn.style.display = 'none';
-            saveBtn.style.display = 'block';
-        } else {
-            prevBtn.style.display = 'block';
-            nextBtn.style.display = 'block';
-            saveBtn.style.display = 'none';
+      }
+    },
+    appointmentStatusChart: {
+      type: 'pie',
+      data: {
+        labels: ['Completed', 'Cancelled', 'Rescheduled'],
+        datasets: [{
+          data: [72, 15, 13],
+          backgroundColor: ['#1cc88a', '#e74a3b', '#f6c23e']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'right'
+          }
         }
-    }
-    
-    function validateStep(step) {
-        // Basic validation for step 1
-        if (step === 0) {
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const gender = document.getElementById('gender').value;
-            const idProof = document.getElementById('idProof').value;
-            const contactNumber = document.getElementById('contactNumber').value;
-            
-            if (!firstName || !lastName || !gender || !idProof || !contactNumber) {
-                alert('Please fill all required fields (marked with *)');
-                return false;
+      }
+    },
+    treatmentTypeChart: {
+      type: 'doughnut',
+      data: {
+        labels: ['Preventive', 'Restorative', 'Cosmetic', 'Surgical'],
+        datasets: [{
+          data: [35, 40, 15, 10],
+          backgroundColor: ['#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'right'
+          }
+        }
+      }
+    },
+    commonTreatmentsChart: {
+      type: 'bar',
+      data: {
+        labels: ['Cleaning', 'Filling', 'Extraction', 'Whitening', 'Checkup'],
+        datasets: [{
+          label: 'Procedures',
+          data: [320, 280, 150, 90, 400],
+          backgroundColor: '#4e73df'
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    },
+    treatmentAgeChart: {
+      type: 'bar',
+      data: {
+        labels: ['0-18', '19-35', '36-50', '51+'],
+        datasets: [
+          {
+            label: 'Preventive',
+            data: [65, 40, 30, 45],
+            backgroundColor: '#1cc88a'
+          },
+          {
+            label: 'Restorative',
+            data: [30, 45, 50, 60],
+            backgroundColor: '#36b9cc'
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        }
+      }
+    },
+    treatmentRevenueChart: {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          {
+            label: 'Preventive',
+            data: [2500, 2800, 3200, 2900, 3100, 3500],
+            backgroundColor: '#1cc88a'
+          },
+          {
+            label: 'Restorative',
+            data: [4200, 4500, 4800, 5100, 5400, 5800],
+            backgroundColor: '#36b9cc'
+          },
+          {
+            label: 'Cosmetic',
+            data: [1800, 2000, 2200, 2500, 2700, 3000],
+            backgroundColor: '#f6c23e'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        },
+        scales: {
+          x: {
+            stacked: true
+          },
+          y: {
+            stacked: true
+          }
+        }
+      }
+    },
+    dentistAppointmentsChart: {
+      type: 'bar',
+      data: {
+        labels: ['Dr. Smith', 'Dr. Lee', 'Dr. Patel', 'Dr. Garcia'],
+        datasets: [{
+          label: 'This Month',
+          data: [42, 38, 35, 28],
+          backgroundColor: '#1cc88a'
+        }, {
+          label: 'Last Month',
+          data: [38, 35, 32, 25],
+          backgroundColor: '#36b9cc'
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        }
+      }
+    },
+    dentistRatingsChart: {
+      type: 'radar',
+      data: {
+        labels: ['Expertise', 'Bedside Manner', 'Punctuality', 'Communication', 'Facility'],
+        datasets: [
+          {
+            label: 'Dr. Smith',
+            data: [4.8, 4.5, 4.2, 4.7, 4.3],
+            borderColor: '#4e73df',
+            backgroundColor: 'rgba(78, 115, 223, 0.1)'
+          },
+          {
+            label: 'Dr. Lee',
+            data: [4.6, 4.8, 4.5, 4.6, 4.4],
+            borderColor: '#1cc88a',
+            backgroundColor: 'rgba(28, 200, 138, 0.1)'
+          }
+        ]
+      },
+      options: {
+        scales: {
+          r: {
+            angleLines: { display: true },
+            suggestedMin: 0,
+            suggestedMax: 5
+          }
+        }
+      }
+    },
+    dentistAvailabilityChart: {
+      type: 'bar',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        datasets: [
+          {
+            label: 'Dr. Smith',
+            data: [8, 8, 6, 8, 6, 4],
+            backgroundColor: '#4e73df'
+          },
+          {
+            label: 'Dr. Lee',
+            data: [6, 8, 8, 6, 8, 4],
+            backgroundColor: '#1cc88a'
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        },
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Hours Available'
             }
+          }
         }
-        return true;
+      }
     }
-    
-    // Save patient data
-    saveBtn.addEventListener('click', function() {
-        // In real app, this would send data to backend
-        alert('Patient data saved successfully!');
-        addPatientModal.hide();
-    });
-    
-    function resetForm() {
-        // Reset all form fields
-        document.querySelectorAll('#addPatientModal input, #addPatientModal select').forEach(el => {
-            if (el.id !== 'patientId' && el.id !== 'regDate') {
-                el.value = '';
-            }
-        });
-        document.getElementById('dobCheckbox').checked = false;
-        document.getElementById('dob').disabled = true;
-        document.getElementById('ageCheckbox').checked = true;
-        document.getElementById('age').disabled = false;
-        selectedConditions.innerHTML = '';
-        conditionsList.innerHTML = '';
-        
-        // Reset to first step
-        steps.forEach(step => step.classList.remove('active'));
-        steps[0].classList.add('active');
-        currentStep = 0;
-        updateButtons();
+  };
+
+  // Initialize all charts
+  document.addEventListener('DOMContentLoaded', function() {
+    for (const [chartId, config] of Object.entries(chartConfigs)) {
+      const ctx = document.getElementById(chartId);
+      if (ctx) new Chart(ctx, config);
     }
-});
+  });

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini 32 Teeth Grid (2 Rows)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .dental-grid {
+      width: 600px;
+      height: 100px;
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 1px;
+      background-color: #999;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    .tooth {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      border: 1px solid #444;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .tooth:hover {
+      background-color: #cce5ff;
+    }
+
+    .tooltip {
+      position: absolute;
+      background-color: #222;
+      color: #fff;
+      padding: 6px;
+      font-size: 12px;
+      border-radius: 4px;
+      display: none;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .tooth.healthy { background-color: #a6e3a1; }     /* green */
+.tooth.filled { background-color: #89c2d9; }      /* blue */
+.tooth.rootcanal { background-color: #f5c542; }   /* orange */
+.tooth.extracted { background-color: #f28b82; }   /* red */
+.tooth.crowned { background-color: #d3a4f9; }     /* purple */
+
+  </style>
+</head>
+<body>
+
+  <h2>Mini 32-Tooth Grid (2 Rows)</h2>
+  <div class="dental-grid">
+    <!-- 32 kutty teeth (FDI or 1–32) -->
+    <div class="tooth" data-id="1">1</div>
+    <div class="tooth" data-id="2">2</div>
+    <div class="tooth" data-id="3">3</div>
+    <div class="tooth" data-id="4">4</div>
+    <div class="tooth" data-id="5">5</div>
+    <div class="tooth" data-id="6">6</div>
+    <div class="tooth" data-id="7">7</div>
+    <div class="tooth" data-id="8">8</div>
+    <div class="tooth" data-id="9">9</div>
+    <div class="tooth" data-id="10">10</div>
+    <div class="tooth" data-id="11">11</div>
+    <div class="tooth" data-id="12">12</div>
+    <div class="tooth" data-id="13">13</div>
+    <div class="tooth" data-id="14">14</div>
+    <div class="tooth" data-id="15">15</div>
+    <div class="tooth" data-id="16">16</div>
+
+    <div class="tooth" data-id="17">17</div>
+    <div class="tooth" data-id="18">18</div>
+    <div class="tooth" data-id="19">19</div>
+    <div class="tooth" data-id="20">20</div>
+    <div class="tooth" data-id="21">21</div>
+    <div class="tooth" data-id="22">22</div>
+    <div class="tooth" data-id="23">23</div>
+    <div class="tooth" data-id="24">24</div>
+    <div class="tooth" data-id="25">25</div>
+    <div class="tooth" data-id="26">26</div>
+    <div class="tooth" data-id="27">27</div>
+    <div class="tooth" data-id="28">28</div>
+    <div class="tooth" data-id="29">29</div>
+    <div class="tooth" data-id="30">30</div>
+    <div class="tooth" data-id="31">31</div>
+    <div class="tooth" data-id="32">32</div>
+  </div>
+
+  <div id="tooltip" class="tooltip"></div>
+
+  <script>
+    const tooltip = document.getElementById('tooltip');
+const teeth = document.querySelectorAll('.tooth');
+
+// Tooth status info
+const toothInfo = {
+  "1": "Tooth 1: Healthy",
+  "5": "Tooth 5: Filled",
+  "11": "Tooth 11: Root Canal",
+  "19": "Tooth 19: Extracted",
+  "32": "Tooth 32: Crowned"
+};
+
+// Function to convert status text to class name
+function getStatusClass(text) {
+  if (text.includes("Healthy")) return "healthy";
+  if (text.includes("Filled")) return "filled";
+  if (text.includes("Root Canal")) return "rootcanal";
+  if (text.includes("Extracted")) return "extracted";
+  if (text.includes("Crowned")) return "crowned";
+  return "";
+}
+
+// Apply color classes on load
+teeth.forEach(tooth => {
+  const id = tooth.dataset.id;
+  const info = toothInfo[id];
+  if (info) {
+    const statusClass = getStatusClass(info);
+    if (statusClass) {
+      tooth.classList.add(statusClass);
+    }
+  }
+
+  // Tooltip events
+  tooth.addEventListener('mouseover', (e) => {
+    if (info) {
+      tooltip.textContent = info;
+      tooltip.style.display = "block";
+      tooltip.style.left = `${e.pageX + 10}px`;
+      tooltip.style.top = `${e.pageY + 10}px`;
+    }
+  });
+
+  tooth.addEventListener('mousemove', (e) => {
+    tooltip.style.left = `${e.pageX + 10}px`;
+    tooltip.style.top = `${e.pageY + 10}px`;
+  });
+
+  tooth.addEventListener('mouseout', () => {
+    tooltip.style.display = "none";
+  });
+});
+
+  </script>
+</body>
+</html>

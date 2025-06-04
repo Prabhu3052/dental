@@ -3,51 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="login.css">
-     <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
-    crossorigin="anonymous"
-  />
+    <title>DentalSoft - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --dental-blue: #0077b6;
+            --dental-light: #caf0f8;
+            --dental-white: #f8f9fa;
+            --dental-dark: #023e8a;
+        }
+        
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--dental-light), var(--dental-white));
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .form_container {
+            position: relative;
+            box-shadow: 0 15px 30px rgba(0, 119, 182, 0.2);
+            background-color: white;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 500px;
+            min-height: 500px;
+        }
+        
+        /* Hospital Logo - Top Left with Curve */
+        .hospital_logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            background-color: var(--dental-blue);
+            border-radius: 0 0 50px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2rem;
+            z-index: 10;
+        }
+        
+        /* Company Logo - Bottom Right with Curve */
+        .company_logo {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background-color: var(--dental-blue);
+            border-radius: 50px 0 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2rem;
+            z-index: 10;
+        }
+        
+        .login_form {
+            padding: 4rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .form-header h3 {
+            color: var(--dental-dark);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-header p {
+            color: #6c757d;
+        }
+        
+        .input_forms .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .input_forms .form-control {
+            padding: 12px 15px 12px 40px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            transition: all 0.3s;
+        }
+        
+        .input_forms .form-control:focus {
+            border-color: var(--dental-blue);
+            box-shadow: 0 0 0 0.25rem rgba(0, 119, 182, 0.25);
+        }
+        
+        .input_forms i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dental-blue);
+        }
+        
+        .login_btn {
+            margin-top: 1.5rem;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: var(--dental-blue);
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .login-btn:hover {
+            background-color: var(--dental-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 119, 182, 0.3);
+        }
+        
+        .login-btn:active {
+            transform: translateY(0);
+        }
+        
+        .user-type-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+        
+        .user-type-btn {
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            margin: 0 5px;
+            cursor: pointer;
+            color: #6c757d;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .user-type-btn.active {
+            color: var(--dental-blue);
+            font-weight: 600;
+        }
+        
+        .user-type-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -11px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--dental-blue);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        @media (max-width: 576px) {
+            .form_container {
+                width: 95%;
+                min-height: auto;
+            }
+        }
+    </style>
 </head>
 <body>
    <div class="form_container">
-    <div class="hospital_logo">
-    
-    </div>
-     <div class="login_form">
-        <form>
-  <div class="input_forms">
-    <div class="form-group mb-3">
-    <input type="text" class="form-control" id="usernameInputEmail1" aria-describedby="emailHelp" placeholder="Enter Username">
-  </div>
-  <div class="form-group">
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
-  </div>
-  <div class="login_btn">
-    <button class="button-82-pushable" role="button">
-  <span class="button-82-shadow"></span>
-  <span class="button-82-edge"></span>
-  <span class="button-82-front text">
-    Login
-  </span>
-</button>
-  </div>
-</form>
-    </div>
-
-   
-    <div class="footer_logo">
-         <div class="company_logo">
+        <!-- Hospital Logo - Top Left with Curve -->
+        <div class="hospital_logo">
+            <i class="fas fa-hospital"></i>
+        </div>
         
+        <!-- Company Logo - Bottom Right with Curve -->
+        <div class="company_logo">
+            <i class="fas fa-tooth"></i>
+        </div>
+        
+        <div class="login_form">
+            <div class="form-header">
+                <h3>DentalSoft Pro</h3>
+                <p>Offline Management System</p>
+            </div>
+            
+            <!-- User Type Selector -->
+            <div class="user-type-selector">
+                <button class="user-type-btn active" data-type="user">
+                    <i class="fas fa-user me-1"></i> User
+                </button>
+                <button class="user-type-btn" data-type="admin">
+                    <i class="fas fa-user-shield me-1"></i> Admin
+                </button>
+                <button class="user-type-btn" data-type="developer">
+                    <i class="fas fa-code me-1"></i> Developer
+                </button>
+            </div>
+            
+            <form id="loginForm">
+                <div class="input_forms">
+                    <div class="form-group mb-3">
+                        <i class="fas fa-user"></i>
+                        <input type="text" class="form-control" id="usernameInput" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="form-control" id="passwordInput" placeholder="Password" required>
+                    </div>
+                    
+                    <div class="form-group form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="rememberCheck">
+                        <label class="form-check-label" for="rememberCheck">Remember me</label>
+                    </div>
+                </div>
+                
+                <div class="login_btn">
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt me-2"></i> Login
+                    </button>
+                </div>
+                
+                <div class="footer">
+                    <small>© 2023 DentalSoft. Offline Management System</small>
+                </div>
+            </form>
+        </div>
     </div>
-    </div>
-   </div>
 
-
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // User type selection
+        const userTypeBtns = document.querySelectorAll('.user-type-btn');
+        userTypeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                userTypeBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('usernameInput').focus();
+            });
+        });
+        
+        // Form submission with different credentials
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('usernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const remember = document.getElementById('rememberCheck').checked;
+            const activeType = document.querySelector('.user-type-btn.active').dataset.type;
+            
+            // Default credentials for demo purposes
+            const credentials = {
+                user: { user: 'user', pass: 'user123' },
+                admin: { user: 'admin', pass: 'admin123' },
+                developer: { user: 'dev', pass: 'dev123' }
+            };
+            
+            if(username === credentials[activeType].user && password === credentials[activeType].pass) {
+                alert(`Login successful as ${activeType}! Redirecting to dashboard...`);
+                // Save to localStorage if "Remember me" is checked
+                if(remember) {
+                    localStorage.setItem('dental_remember', JSON.stringify({
+                        username: username,
+                        type: activeType
+                    }));
+                }
+                // Redirect to respective dashboard
+                // window.location.href = `${activeType}-dashboard.html`;
+            } else {
+                alert('Invalid credentials! Please try again.');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        });
+        
+        // Check for remembered login
+        document.addEventListener('DOMContentLoaded', function() {
+            const remembered = localStorage.getItem('dental_remember');
+            if(remembered) {
+                const data = JSON.parse(remembered);
+                document.getElementById('usernameInput').value = data.username;
+                document.getElementById('rememberCheck').checked = true;
+                
+                // Activate the correct user type button
+                document.querySelectorAll('.user-type-btn').forEach(btn => {
+                    if(btn.dataset.type === data.type) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                document.getElementById('passwordInput').focus();
+            }
+        });
+    </script>
 </body>
 </html>

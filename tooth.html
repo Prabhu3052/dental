@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interactive Mouth-like Tooth Chart</title>
+<style>
+       
+      h1, .tooth-label {
+  text-align: center;
+  color: var(--primary-color);
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.dental-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.upper-jaw, .lower-jaw {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.tooth {
+  width: 25px;
+  height: 25px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+  background: white;
+  position: relative;
+}
+
+.tooth:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+}
+
+.tooth-number {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.tooth-problem {
+  font-size: 9px;
+  color: var(--danger-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 90%;
+  text-align: center;
+  margin-top: 2px;
+}
+.tooth_buttons{
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 1rem;
+  row-gap: 1rem;
+}
+.input-container, .problem-history {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+#problemInput {
+  padding: 10px;
+  width: 350px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  flex-grow: 1;
+}
+
+
+
+
+.selected {
+  background: #fff9c4;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px var(--secondary-color);
+}
+
+.has-problem {
+  background: #ffebee;
+  border-color: #ffcdd2;
+}
+
+.problem-history h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.problem-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.problem-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.problem-item:last-child {
+  border-bottom: none;
+}
+
+.problem-text {
+  flex-grow: 1;
+}
+
+.problem-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.problem-time {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.delete-problem {
+  color: var(--danger-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 5px;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+
+.delete-problem:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.no-problems {
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
+}
+
+.problem-number {
+  font-weight: bold;
+  margin-right: 8px;
+  color: var(--primary-color);
+  min-width: 25px;
+  display: inline-block;
+}
+
+
+
+
+
+
+ /* Container and layout */
+.container, .info-panel {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.container {
+  max-width: 720px;
+}
+.info-panel {
+  max-width: 320px;
+  font-size: 15px;
+}
+.panel-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+/* Headings */
+h2 {
+  margin-bottom: 15px;
+}
+.info-panel h3, .details-panel h3 {
+  margin: 0 0 10px;
+  color: #333;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+/* Tooth grid styled to look like a mouth */
+.mouth, .teeth-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 40px);
+  gap: 6px;
+  justify-content: center;
+  user-select: none;
+  flex: 1 1 320px;
+}
+
+/* Tooth styling */
+.tooth {
+  position: relative;
+  width: 40px;
+  height: 50px;
+  border-radius: 8px;
+  border: 2px solid #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #222;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+  flex-direction: column;
+}
+.tooth:hover {
+  box-shadow: 0 0 10px #007bff;
+  transform: scale(1.1);
+  z-index: 10;
+}
+.tooth.selected {
+  border-color: #28a745;
+  box-shadow: 0 0 12px #28a745;
+  transform: scale(1.1);
+}
+
+/* Tooth type colors */
+.Incisors { background: #ffd3d3; border-color: #e55353; }
+.Canines  { background: #d3e0ff; border-color: #496fd1; }
+.Premolars { background: #d3ffd9; border-color: #3ba143; }
+.Molars { background: #fff3d3; border-color: #d1aa49; }
+.Wisdom { background: #e2d3ff; border-color: #7a59d1; }
+
+/* Alternative color modes for class-based system */
+.tooth.incisors { color: #1976d2; }
+.tooth.canines { color: #d32f2f; }
+.tooth.premolars { color: #f57c00; }
+.tooth.molars { color: #2e7d32; }
+.tooth.wisdom { color: #6c4aeb; }
+
+/* Status indicators */
+.status-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #bbb;
+  border: 1px solid #999;
+}
+.status-ongoing {
+  background-color: #ffcc00;
+  box-shadow: 0 0 4px #ffb300;
+}
+.status-completed {
+  background-color: #4caf50;
+  box-shadow: 0 0 4px #388e3c;
+}
+
+/* Tooth number and checkbox */
+.tooth-number {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 10px;
+  color: #444;
+}
+.tooth-checkbox {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  z-index: 15;
+}
+
+/* Tooltip */
+.tooth .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 20;
+  transition: opacity 0.2s;
+}
+.tooth:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Gap between teeth (if needed) */
+.tooth.gap-right {
+  margin-right: 12px;
+}
+
+/* Edit multiple button */
+#editMultipleBtn {
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+  padding: 8px 12px;
+  font-weight: 700;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: none;
+  z-index: 100;
+}
+
+/* Form and input styles */
+form label {
+  display: block;
+  margin: 8px 0 4px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+form input[type="text"],
+form input[type="date"],
+form input[type="time"],
+form select {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+form input:focus,
+form select:focus {
+  border-color: #3a7afe;
+  outline: none;
+}
+
+/* Buttons */
+button {
+  padding: 8px 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+button:hover {
+  background-color: #0056b3;
+}
+.save-btn, .save-button {
+  background-color: #28a745;
+  color: white;
+}
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+.buttons-area {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Info rows */
+.info-row, .info-line {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 4px 0;
+}
+.info-label, .label-text {
+  font-weight: 700;
+  color: #555;
+}
+.info-value, .value-text {
+  color: #222;
+}
+
+/* No tooth selected message */
+#noToothSelected {
+  font-style: italic;
+  color: #666;
+  font-size: 14px;
+  user-select: none;
+}
+</style>
+</head>
+<body>
+
+<div class="step step-4">
+  <div class="row">
+    <div class="mouth col-md-12 my-4" id="mouth"></div>
+
+    <div class="controls col-md-6 gap-2">
+      <label for="addToothType">Tooth Type</label>
+      <select id="addToothType">
+        <option value="Incisors">Incisors</option>
+        <option value="Canines">Canines</option>
+        <option value="Premolars">Premolars</option>
+        <option value="Molars">Molars</option>
+        <option value="Wisdom">Wisdom Teeth</option>
+      </select>
+
+      <label><input type="radio" name="jaw" value="upper" checked> Upper Jaw</label>
+      <label><input type="radio" name="jaw" value="lower"> Lower Jaw</label>
+
+      <label for="addToothCount">Number of Teeth to Add</label>
+      <select id="addToothCount">
+        <option value="1" selected>1</option>
+      </select>
+
+      <label for="addToothPosition">Position to Add</label>
+      <select id="addToothPosition"></select>
+
+      <button class="mt-3" id="btnAddTeeth">Add Tooth</button>
+    </div>
+
+    <div class="info-panel col-md-6" id="infoPanel">
+      <h3>Treatment Details</h3>
+      <div id="noSelection">Click a tooth to see treatment details here.</div>
+      <div id="treatmentInfo" style="display:none;">
+        <div class="info-row"><span class="info-label">Tooth ID:</span><span id="infoId" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">Type:</span><span id="infoType" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">Treatment:</span><span id="infoTreatment" class="info-value"></span></div>
+        <div class="info-row"><span class="info-label">Status:</span><span id="infoStatus" class="info-value"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        </div>
+
+<script>
+  let teeth = [
+  // Upper Jaw (1–16)
+  {id: 1, type: 'Wisdom', treatment: '', status: ''},
+  {id: 2, type: 'Molars', treatment: '', status: ''},
+  {id: 3, type: 'Molars', treatment: '', status: ''},
+  {id: 4, type: 'Premolars', treatment: '', status: ''},
+  {id: 5, type: 'Premolars', treatment: '', status: ''},
+  {id: 6, type: 'Canines', treatment: '', status: ''},
+  {id: 7, type: 'Incisors', treatment: '', status: ''},
+  {id: 8, type: 'Incisors', treatment: '', status: ''},
+  {id: 9, type: 'Incisors', treatment: '', status: ''},
+  {id: 10, type: 'Incisors', treatment: '', status: ''},
+  {id: 11, type: 'Canines', treatment: '', status: ''},
+  {id: 12, type: 'Premolars', treatment: '', status: ''},
+  {id: 13, type: 'Premolars', treatment: '', status: ''},
+  {id: 14, type: 'Molars', treatment: '', status: ''},
+  {id: 15, type: 'Molars', treatment: '', status: ''},
+  {id: 16, type: 'Wisdom', treatment: '', status: ''},
+
+  // Lower Jaw (17–32)
+  {id: 17, type: 'Wisdom', treatment: '', status: ''},
+  {id: 18, type: 'Molars', treatment: '', status: ''},
+  {id: 19, type: 'Molars', treatment: '', status: ''},
+  {id: 20, type: 'Premolars', treatment: '', status: ''},
+  {id: 21, type: 'Premolars', treatment: '', status: ''},
+  {id: 22, type: 'Canines', treatment: '', status: ''},
+  {id: 23, type: 'Incisors', treatment: '', status: ''},
+  {id: 24, type: 'Incisors', treatment: '', status: ''},
+  {id: 25, type: 'Incisors', treatment: '', status: ''},
+  {id: 26, type: 'Incisors', treatment: '', status: ''},
+  {id: 27, type: 'Canines', treatment: '', status: ''},
+  {id: 28, type: 'Premolars', treatment: '', status: ''},
+  {id: 29, type: 'Premolars', treatment: '', status: ''},
+  {id: 30, type: 'Molars', treatment: '', status: ''},
+  {id: 31, type: 'Molars', treatment: '', status: ''},
+  {id: 32, type: 'Wisdom', treatment: '', status: ''}
+];
+
+const mouth = document.getElementById('mouth');
+const addToothTypeSelect = document.getElementById('addToothType');
+const addToothCountSelect = document.getElementById('addToothCount');
+const addToothPositionSelect = document.getElementById('addToothPosition');
+const btnAddTeeth = document.getElementById('btnAddTeeth');
+const jawRadios = document.querySelectorAll('input[name="jaw"]');
+
+let selectedToothId = null;
+
+function renderMouth() {
+  mouth.innerHTML = '';
+  for (let i = 0; i < teeth.length; i++) {
+    const tooth = teeth[i];
+    const toothDiv = document.createElement('div');
+    toothDiv.classList.add('tooth', tooth.type);
+    toothDiv.dataset.id = tooth.id;
+
+    const numSpan = document.createElement('span');
+    numSpan.classList.add('tooth-number');
+    numSpan.textContent = tooth.id;
+    toothDiv.appendChild(numSpan);
+
+    const dot = document.createElement('div');
+    dot.classList.add('status-dot');
+    if (tooth.status === 'ongoing') dot.classList.add('status-ongoing');
+    else if (tooth.status === 'completed') dot.classList.add('status-completed');
+    toothDiv.appendChild(dot);
+
+    toothDiv.appendChild(document.createTextNode(tooth.type[0]));
+
+    if (selectedToothId === tooth.id) toothDiv.classList.add('selected');
+
+    toothDiv.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectedToothId = tooth.id;
+      renderMouth();
+      showTreatmentDetails(tooth);
+    });
+
+    toothDiv.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      if (confirm(`Delete tooth #${tooth.id} (${tooth.type})?`)) {
+        deleteTooth(tooth.id);
+      }
+    });
+
+    mouth.appendChild(toothDiv);
+  }
+}
+
+const noSelectionDiv = document.getElementById('noSelection');
+const treatmentInfoDiv = document.getElementById('treatmentInfo');
+const infoId = document.getElementById('infoId');
+const infoType = document.getElementById('infoType');
+const infoTreatment = document.getElementById('infoTreatment');
+const infoStatus = document.getElementById('infoStatus');
+
+function showTreatmentDetails(tooth) {
+  noSelectionDiv.style.display = 'none';
+  treatmentInfoDiv.style.display = 'block';
+  infoId.textContent = tooth.id;
+  infoType.textContent = tooth.type;
+  infoTreatment.textContent = tooth.treatment || 'No treatment';
+  infoStatus.textContent = tooth.status || 'None';
+}
+
+function deleteTooth(id) {
+  teeth = teeth.filter(t => t.id !== id);
+  if (selectedToothId === id) {
+    selectedToothId = null;
+    noSelectionDiv.style.display = 'block';
+    treatmentInfoDiv.style.display = 'none';
+  }
+  renderMouth();
+  updateAddPositionOptions();
+}
+
+function addTeeth(type, count, position) {
+  let maxId = teeth.reduce((max, t) => Math.max(max, t.id), 0);
+  for (let i = 0; i < count; i++) {
+    maxId++;
+    teeth.splice(position + i, 0, { id: maxId, type, treatment: '', status: '' });
+  }
+  renderMouth();
+  updateAddPositionOptions();
+}
+
+function updateAddPositionOptions() {
+  const selectedType = addToothTypeSelect.value;
+  const selectedJaw = [...jawRadios].find(r => r.checked).value;
+  addToothPositionSelect.innerHTML = '';
+
+  const startIdx = selectedJaw === 'upper' ? 0 : 16;
+  const endIdx = selectedJaw === 'upper' ? 16 : teeth.length;
+
+  const indexes = teeth
+    .map((t, i) => (i >= startIdx && i < endIdx && t.type === selectedType) ? i : -1)
+    .filter(i => i !== -1);
+
+  if (indexes.length === 0) {
+    addToothPositionSelect.innerHTML = `
+      <option value="${startIdx}">Start (Position ${startIdx})</option>
+      <option value="${endIdx}">End (Position ${endIdx})</option>
+    `;
+  } else {
+    indexes.forEach(idx => {
+      addToothPositionSelect.innerHTML += `
+        <option value="${idx}">Before tooth #${teeth[idx].id} (pos ${idx})</option>
+        <option value="${idx + 1}">After tooth #${teeth[idx].id} (pos ${idx + 1})</option>
+      `;
+    });
+  }
+}
+
+addToothTypeSelect.addEventListener('change', updateAddPositionOptions);
+jawRadios.forEach(r => r.addEventListener('change', updateAddPositionOptions));
+
+btnAddTeeth.addEventListener('click', () => {
+  const type = addToothTypeSelect.value;
+  const count = parseInt(addToothCountSelect.value);
+  const position = parseInt(addToothPositionSelect.value);
+  addTeeth(type, count, position);
+});
+
+document.body.addEventListener('click', () => {
+  selectedToothId = null;
+  renderMouth();
+  noSelectionDiv.style.display = 'block';
+  treatmentInfoDiv.style.display = 'none';
+});
+
+updateAddPositionOptions();
+renderMouth();
+
+</script>
+
+</body>
+</html>

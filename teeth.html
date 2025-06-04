@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Multi-Select Teeth Treatment Editor</title>
+  <style>
+
+.panel-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+label {
+  font-weight: 600;
+  user-select: none;
+  cursor: pointer;
+}
+
+.teeth-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 40px);
+  gap: 8px;
+  user-select: none;
+  flex: 1 1 320px;
+}
+
+.tooth {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid #777;
+  border-radius: 6px;
+  text-align: center;
+  line-height: 1.1;
+  cursor: pointer;
+  background-color: #fefefe;
+  transition: background-color 0.3s, border-color 0.3s;
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.tooth:hover {
+  background-color: #e8f0fe;
+  border-color: #3a7afe;
+}
+
+.tooth.wisdom {
+  color: #6c4aeb;
+}
+
+.tooth.molars {
+  color: #2e7d32;
+}
+
+.tooth.premolars {
+  color: #f57c00;
+}
+
+.tooth.canines {
+  color: #d32f2f;
+}
+
+.tooth.incisors {
+  color: #1976d2;
+}
+
+.tooth.ongoing {
+  border-color: #ffb300;
+  background-color: #fff8e1;
+}
+
+.tooth.completed {
+  border-color: #388e3c;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.tooth-number {
+  font-size: 11px;
+  font-weight: 700;
+  position: absolute;
+  bottom: 3px;
+  right: 4px;
+  color: #999;
+  user-select: none;
+}
+
+.tooth-checkbox {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.status-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.status-ongoing {
+  background-color: #ffb300;
+  box-shadow: 0 0 4px #ffb300;
+}
+
+.status-completed {
+  background-color: #388e3c;
+  box-shadow: 0 0 4px #388e3c;
+}
+
+.details-panel {
+  flex: 1 1 280px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 15px 20px;
+  background: #fafafa;
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.1);
+  min-width: 280px;
+}
+
+.details-panel h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: 20px;
+  color: #222;
+  user-select: none;
+}
+
+#noToothSelected {
+  font-style: italic;
+  color: #666;
+  line-height: 1.4;
+  font-size: 14px;
+  user-select: none;
+}
+
+.info-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+.label-text {
+  font-weight: 600;
+  color: #444;
+  user-select: none;
+}
+
+.value-text {
+  color: #222;
+  user-select: text;
+}
+
+form label {
+  display: block;
+  margin: 8px 0 4px 0;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  user-select: none;
+}
+
+form input[type="text"],
+form input[type="date"],
+form input[type="time"],
+form select {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+form input[type="text"]:focus,
+form input[type="date"]:focus,
+form input[type="time"]:focus,
+form select:focus {
+  border-color: #3a7afe;
+  outline: none;
+}
+
+.buttons-area {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+button {
+  cursor: pointer;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  border: none;
+  transition: background-color 0.3s;
+  user-select: none;
+}
+
+.save-button {
+  background-color: #3a7afe;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #2e5edb;
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: #444;
+}
+
+.cancel-button:hover {
+  background-color: #999;
+  color: white;
+}
+
+#multiEditBtn {
+  margin-top: 10px;
+  padding: 8px 16px;
+  font-weight: 700;
+  font-size: 15px;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  user-select: none;
+  transition: background-color 0.3s;
+  display: none; /* hidden initially, shown when selection */
+}
+
+#multiEditBtn:hover {
+  background-color: #1359a6;
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .panel-wrapper {
+    flex-direction: column;
+  }
+  .teeth-grid {
+    grid-template-columns: repeat(8, 35px);
+    gap: 6px;
+  }
+  .tooth {
+    width: 35px;
+    height: 35px;
+    font-size: 13px;
+  }
+}
+
+
+    /* Different tooth types colors */
+  .Incisors {
+    background: #ffd3d3;
+    border-color: #e55353;
+  }
+  .Canines {
+    background: #d3e0ff;
+    border-color: #496fd1;
+  }
+  .Premolars {
+    background: #d3ffd9;
+    border-color: #3ba143;
+  }
+  .Molars {
+    background: #fff3d3;
+    border-color: #d1aa49;
+  }
+  .Wisdom {
+    background: #e2d3ff;
+    border-color: #7a59d1;
+  }
+  </style>
+</head>
+<body>
+   <div class="panel-wrapper">
+    <label>
+      <input type="checkbox" id="enableMultiSelect"> Enable multi-select
+    </label>
+    <div class="teeth-grid" id="teethGrid"></div>
+
+    <div class="details-panel" id="detailsPanel">
+      <h3>Treatment Details</h3>
+      <div id="noToothSelected">
+        Click a tooth to see treatment details here.<br>
+        <small>Or select multiple teeth with checkboxes to edit treatment in bulk.</small>
+      </div>
+
+      <div id="singleToothDetails" style="display:none;">
+        <div class="info-line"><span class="label-text">Tooth ID:</span><span id="detailToothId" class="value-text"></span></div>
+        <div class="info-line"><span class="label-text">Type:</span><span id="detailToothType" class="value-text"></span></div>
+        <div class="info-line"><span class="label-text">Treatment:</span><span id="detailTreatment" class="value-text"></span></div>
+        <div class="info-line"><span class="label-text">Status:</span><span id="detailStatus" class="value-text"></span></div>
+        <div class="info-line"><span class="label-text">Date:</span><span id="detailDate" class="value-text"></span></div>
+        <div class="info-line"><span class="label-text">Time:</span><span id="detailTime" class="value-text"></span></div>
+      </div>
+
+      <form id="singleEditForm" style="display:none;">
+        <div><strong>Tooth ID:</strong> <span id="editToothId"></span></div>
+        <div><strong>Type:</strong> <span id="editToothType"></span></div>
+
+        <label for="treatmentEditInput">Treatment</label>
+        <input type="text" id="treatmentEditInput" name="treatmentEditInput" required />
+
+        <label for="statusEditSelect">Status</label>
+        <select id="statusEditSelect" name="statusEditSelect" required>
+          <option value="None">None</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Completed">Completed</option>
+        </select>
+
+        <label for="dateEditInput">Date</label>
+        <input type="date" id="dateEditInput" name="dateEditInput" required />
+
+        <label for="timeEditInput">Time</label>
+        <input type="time" id="timeEditInput" name="timeEditInput" required />
+
+        <div class="buttons-area">
+          <button type="submit" class="save-button">Save</button>
+          <button type="button" id="cancelSingleEdit" class="cancel-button">Cancel</button>
+        </div>
+      </form>
+
+      <form id="multiEditForm" style="display:none;">
+        <h4>Edit Multiple Treatments</h4>
+
+        <label for="multiTreatmentInput">Treatment</label>
+        <input type="text" id="multiTreatmentInput" name="multiTreatmentInput" placeholder="Leave empty to keep unchanged" />
+
+        <label for="multiStatusSelect">Status</label>
+        <select id="multiStatusSelect" name="multiStatusSelect">
+          <option value="">-- Keep unchanged --</option>
+          <option value="None">None</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Completed">Completed</option>
+        </select>
+
+        <label for="multiDateInput">Date</label>
+        <input type="date" id="multiDateInput" name="multiDateInput" />
+
+        <label for="multiTimeInput">Time</label>
+        <input type="time" id="multiTimeInput" name="multiTimeInput" />
+
+        <div class="buttons-area">
+          <button type="submit" class="save-button">Save All</button>
+          <button type="button" id="cancelMultiEdit" class="cancel-button">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <button id="multiEditBtn" title="Edit Selected Treatments">Edit Selected Treatments</button>
+  </div>
+<script>
+let allTeeth = [
+  // Upper Jaw (1–16)
+  {id: 1, type: 'Wisdom', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 2, type: 'Molars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 3, type: 'Molars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 4, type: 'Premolars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 5, type: 'Premolars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 6, type: 'Canines', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 7, type: 'Incisors', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 8, type: 'Incisors', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 9, type: 'Incisors', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 10, type: 'Incisors', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 11, type: 'Canines', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 12, type: 'Premolars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 13, type: 'Premolars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 14, type: 'Molars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 15, type: 'Molars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 16, type: 'Wisdom', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  // Lower Jaw (17–32)
+  {id: 17, type: 'Wisdom', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 18, type: 'Molars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 19, type: 'Molars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 20, type: 'Premolars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 21, type: 'Premolars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 22, type: 'Canines', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 23, type: 'Incisors', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 24, type: 'Incisors', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 25, type: 'Incisors', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 26, type: 'Incisors', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 27, type: 'Canines', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 28, type: 'Premolars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 29, type: 'Premolars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 30, type: 'Molars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 31, type: 'Molars', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+  {id: 32, type: 'Wisdom', treatment: '', status: '', treatmentDate: '', treatmentTime: ''},
+];
+
+const mouthEl = document.getElementById('teethGrid');
+const noSelectionEl = document.getElementById('noToothSelected');
+const treatmentInfoEl = document.getElementById('singleToothDetails');
+const editForm = document.getElementById('singleEditForm');
+const cancelBtn = document.getElementById('cancelSingleEdit');
+
+const editMultipleBtn = document.getElementById('multiEditBtn');
+const editMultipleForm = document.getElementById('multiEditForm');
+const cancelMultipleBtn = document.getElementById('cancelMultiEdit');
+
+const multiSelectToggle = document.getElementById('enableMultiSelect');
+
+let activeToothId = null;
+let editMode = false;
+let selectedMultiIds = new Set();
+
+// Helper format functions
+function formatDate(dateStr) {
+  return dateStr || '';
+}
+function formatTime(timeStr) {
+  return timeStr || '';
+}
+
+// Render teeth grid
+function renderTeeth() {
+  mouthEl.innerHTML = '';
+  allTeeth.forEach(tooth => {
+    const toothDiv = document.createElement('div');
+    toothDiv.classList.add('tooth');
+    toothDiv.classList.add(tooth.type.toLowerCase()); // e.g. 'molars', 'wisdom' lowercase
+    toothDiv.id = `tooth-${tooth.id}`;
+    toothDiv.title = `Tooth ${tooth.id} (${tooth.type})\nTreatment: ${tooth.treatment || 'None'}`;
+
+    toothDiv.appendChild(document.createTextNode(tooth.type[0]));
+
+    const numSpan = document.createElement('span');
+    numSpan.classList.add('tooth-number');
+    numSpan.textContent = tooth.id;
+    toothDiv.appendChild(numSpan);
+
+    if(tooth.status) {
+      toothDiv.classList.add(tooth.status.toLowerCase()); // e.g. 'ongoing', 'completed'
+    }
+
+    // Checkbox for multi-select
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.classList.add('tooth-checkbox');
+    checkbox.dataset.toothId = tooth.id;
+    checkbox.style.display = multiSelectToggle.checked ? 'inline-block' : 'none';
+
+    checkbox.checked = selectedMultiIds.has(tooth.id);
+
+    checkbox.addEventListener('change', (e) => {
+      const id = parseInt(e.target.dataset.toothId);
+      if(e.target.checked){
+        selectedMultiIds.add(id);
+      } else {
+        selectedMultiIds.delete(id);
+      }
+      updateMultiEditButton();
+      clearSingleSelection();
+      renderInfoPanel();
+    });
+
+    toothDiv.appendChild(checkbox);
+
+    toothDiv.addEventListener('click', (e) => {
+      if(e.target === checkbox) return;
+
+      if(multiSelectToggle.checked){
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
+      } else {
+        activeToothId = tooth.id;
+        renderInfoPanel();
+      }
+    });
+
+    toothDiv.addEventListener('dblclick', (e) => {
+      if(multiSelectToggle.checked) return; // disable editing in multi-select mode
+      activeToothId = tooth.id;
+      enterEditMode();
+    });
+
+    // Status dot
+    const dot = document.createElement('div');
+    dot.classList.add('status-dot');
+    if (tooth.status.toLowerCase() === 'ongoing') dot.classList.add('status-ongoing');
+    else if (tooth.status.toLowerCase() === 'completed') dot.classList.add('status-completed');
+    toothDiv.appendChild(dot);
+
+    mouthEl.appendChild(toothDiv);
+  });
+}
+
+// Render info panel
+function renderInfoPanel() {
+  if(multiSelectToggle.checked){
+    if(selectedMultiIds.size > 0){
+      noSelectionEl.style.display = 'none';
+      treatmentInfoEl.style.display = 'none';
+      editForm.style.display = 'none';
+      editMultipleForm.style.display = 'block';
+    } else {
+      noSelectionEl.style.display = 'block';
+      treatmentInfoEl.style.display = 'none';
+      editForm.style.display = 'none';
+      editMultipleForm.style.display = 'none';
+    }
+  } else {
+    if(activeToothId === null){
+      noSelectionEl.style.display = 'block';
+      treatmentInfoEl.style.display = 'none';
+      editForm.style.display = 'none';
+      editMultipleForm.style.display = 'none';
+    } else {
+      noSelectionEl.style.display = 'none';
+      editForm.style.display = 'none';
+      editMultipleForm.style.display = 'none';
+      treatmentInfoEl.style.display = 'block';
+
+      const tooth = allTeeth.find(t => t.id === activeToothId);
+      if(!tooth) return;
+      document.getElementById('detailToothId').textContent = tooth.id;
+      document.getElementById('detailToothType').textContent = tooth.type;
+      document.getElementById('detailTreatment').textContent = tooth.treatment || 'None';
+      document.getElementById('detailStatus').textContent = tooth.status || 'None';
+      document.getElementById('detailDate').textContent = formatDate(tooth.treatmentDate);
+      document.getElementById('detailTime').textContent = formatTime(tooth.treatmentTime);
+    }
+  }
+}
+
+function enterEditMode() {
+  if(activeToothId === null) return;
+
+  editMode = true;
+  treatmentInfoEl.style.display = 'none';
+  noSelectionEl.style.display = 'none';
+  editMultipleForm.style.display = 'none';
+  editForm.style.display = 'block';
+
+  const tooth = allTeeth.find(t => t.id === activeToothId);
+  if(!tooth) return;
+
+  document.getElementById('editToothId').textContent = tooth.id;
+  document.getElementById('editToothType').textContent = tooth.type;
+  document.getElementById('treatmentEditInput').value = tooth.treatment;
+  document.getElementById('statusEditSelect').value = tooth.status;
+  document.getElementById('dateEditInput').value = tooth.treatmentDate;
+  document.getElementById('timeEditInput').value = tooth.treatmentTime;
+}
+
+function exitEditMode() {
+  editMode = false;
+  editForm.style.display = 'none';
+  renderInfoPanel();
+}
+
+function clearSingleSelection() {
+  activeToothId = null;
+}
+
+function updateMultiEditButton() {
+  editMultipleBtn.style.display = selectedMultiIds.size > 0 ? 'inline-block' : 'none';
+}
+
+multiSelectToggle.addEventListener('change', () => {
+  selectedMultiIds.clear();
+  activeToothId = null;
+  updateMultiEditButton();
+  renderTeeth();
+  renderInfoPanel();
+});
+
+// Cancel single edit
+cancelBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  exitEditMode();
+});
+
+// Save single tooth edit
+editForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if(activeToothId === null) return;
+
+  const tooth = allTeeth.find(t => t.id === activeToothId);
+  if(!tooth) return;
+
+  tooth.treatment = document.getElementById('treatmentEditInput').value.trim();
+  tooth.status = document.getElementById('statusEditSelect').value;
+  tooth.treatmentDate = document.getElementById('dateEditInput').value;
+  tooth.treatmentTime = document.getElementById('timeEditInput').value;
+
+  exitEditMode();
+  renderTeeth();
+});
+
+// Show multi-edit form
+editMultipleBtn.addEventListener('click', () => {
+  if(selectedMultiIds.size === 0) return;
+
+  editForm.style.display = 'none';
+  treatmentInfoEl.style.display = 'none';
+  noSelectionEl.style.display = 'none';
+  editMultipleForm.style.display = 'block';
+
+  document.getElementById('multiTreatmentInput').value = '';
+  document.getElementById('multiStatusSelect').value = '';
+  document.getElementById('multiDateInput').value = '';
+  document.getElementById('multiTimeInput').value = '';
+});
+
+// Cancel multi-edit
+cancelMultipleBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  editMultipleForm.style.display = 'none';
+  renderInfoPanel();
+});
+
+// Save multi-edit form
+editMultipleForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const newTreatment = document.getElementById('multiTreatmentInput').value.trim();
+  const newStatus = document.getElementById('multiStatusSelect').value;
+  const newDate = document.getElementById('multiDateInput').value;
+  const newTime = document.getElementById('multiTimeInput').value;
+
+  selectedMultiIds.forEach(id => {
+    const tooth = allTeeth.find(t => t.id === id);
+    if(tooth){
+      if(newTreatment !== '') tooth.treatment = newTreatment;
+      if(newStatus !== '') tooth.status = newStatus;
+      if(newDate !== '') tooth.treatmentDate = newDate;
+      if(newTime !== '') tooth.treatmentTime = newTime;
+    }
+  });
+
+  selectedMultiIds.clear();
+  editMultipleForm.style.display = 'none';
+  multiSelectToggle.checked = false;
+  renderTeeth();
+  renderInfoPanel();
+  updateMultiEditButton();
+});
+
+// Initial render
+renderTeeth();
+renderInfoPanel();
+updateMultiEditButton();
+
+
+
+</script>
+</body>
+</html>

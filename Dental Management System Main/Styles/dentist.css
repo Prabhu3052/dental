@@ -1,0 +1,294 @@
+
+/* ============================= */
+/* -------- Root CSS -------- */
+/* ============================= */
+:root {
+  --primary-color: black;
+  --secondary-color: white;
+  --teritory-color: #0077b6;
+  
+}
+
+/* ============================= */
+/* -------- General CSS -------- */
+/* ============================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0f4f8;
+  color: var(--primary-color);
+  height: 100vh;
+} 
+
+/* ============================= */
+/* -------- Breadcrumb CSS -------- */
+/* ============================= */
+
+.breadcrumb{
+  font-weight: bold;
+}
+.breadcrumb a{
+  text-decoration: none;
+  color: var(--teritory-color);
+}
+
+
+/* ============================= */
+/* -------- Input CSS -------- */
+/* ============================= */
+
+.input-group input:focus {
+  box-shadow: none; 
+  border: 1px solid #e0f0ff;
+}
+.input-group select:focus {
+  box-shadow: none; 
+  border: 1px solid #e0f0ff;
+}
+
+/* -------- Modal Width CSS -------- */
+.custom-modal-width {
+  width: 100%;
+  min-width: 800px; 
+}
+
+
+
+/* ============================= */
+/* -------- Table CSS -------- */
+/* ============================= */
+
+  .table-wrapper {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to bottom right, #ffffff, #f9f9ff);
+    padding: 20px;
+    margin-top: 30px;
+  }
+
+
+  table.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: transparent;
+  }
+
+  .table thead th {
+    background-color: #e0f0ff;
+    color: var(--teritory-color);
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 12px;
+    border: none;
+  }
+
+  .table tbody td {
+    background-color: white;
+    color: #555;
+    text-align: center;
+    padding: 14px;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .table tbody tr:hover td {
+    background-color: #f0f4ff;
+    transition: 0.3s;
+  }
+
+ 
+  .table thead tr th:first-child {
+    border-top-left-radius: 10px;
+  }
+  .table thead tr th:last-child {
+    border-top-right-radius: 10px;
+  }
+
+
+  /* ============================= */
+/* -------- Content CSS -------- */
+/* ============================= */
+.content {
+  background-color: #f9fbfd;
+  padding: 2rem;
+  display: block;
+}
+
+
+
+/* ============================= */
+/* -------- Accordion CSS -------- */
+/* ============================= */
+.accordion-button {
+  background-color: #e0f0ff;
+  color: #0077b6;
+  font-weight: 600;
+}
+
+
+.modal-dialog{
+  height: 1200px;
+}
+.medical-name{
+  margin: 0px;
+}
+
+/* ============================= */
+/* -------- Buttons CSS -------- */
+/* ============================= */
+
+.add_button , .add_Treatmentbutton , .add_appointment_btn , .add_Dentistbutton , .add_billing_btn{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+   background-color: var(--teritory-color);
+  border: 1px solid var(--teritory-color);
+    color: #fff;
+    transition: transform 150ms, box-shadow 150ms;
+    padding: 4px 10px 4px 10px;
+    font-size: 1.2rem;
+    font-weight: 400;
+     border-radius: 4px;
+     cursor: pointer;
+}
+
+
+#nextBtn , #openEditModalBtn , #editTreatmentBtn , #openAppointmentEditModalBtn , #editDentistBtn , #openBillingEditModalBtn{
+  background-color: var(--teritory-color);
+}
+
+.mdi-delete-clock{
+  font-size: 5rem;
+  color: var(--teritory-color);
+}
+
+#confirmYes{
+  background-color: var(--teritory-color);
+  color: var(--secondary-color);
+}
+
+
+
+/* ============================= */
+/* -------- Icon Color CSS -------- */
+/* ============================= */
+
+.bi-person {
+  color: #0d6efd;
+}
+
+.bi-gender-ambiguous {
+  color: #6610f2; 
+}
+
+.bi-hourglass-split {
+  color: #fd7e14; 
+}
+
+.bi-calendar-event {
+  color: #198754;
+}
+
+.bi-droplet-half {
+  color: #dc3545; 
+}
+
+.bi-shield-check {
+  color: #20c997; 
+}
+
+.bi-shield-exclamation {
+  color: #ffc107; 
+}
+
+.bi-card-heading {
+  color: #6c757d; 
+}
+
+.bi-sort-down {
+  color: #0dcaf0;
+}
+
+.bi-list-ol {
+  color: #6f42c1;
+}
+
+.bi-clipboard-check {
+  color: #198754; 
+}
+
+.bi-hash {
+  color: #6c757d; 
+}
+
+.bi-calendar-check {
+  color: #28a745; 
+}
+
+.bi-calendar-date {
+  color: #ffc107; 
+}
+
+.bi-file-earmark-text {
+  color: #343a40; 
+}
+
+.bi-telephone {
+  color: #007bff; 
+}
+
+.bi-telephone-plus {
+  color: #dc3545; 
+}
+
+.bi-person-heart {
+  color: #e83e8c; 
+}
+
+.bi-exclamation-triangle {
+  color: #dc3545; 
+}
+
+.bi-wind {
+  color: #6c757d; 
+}
+
+.bi-universal-access {
+  color: #17a2b8; 
+}
+
+.bi-shield-plus {
+  color: #28a745; 
+}
+
+.bi-123 {
+  color: #343a40; 
+}
+
+.bi-calendar-range {
+  color: #007bff; 
+}
+
+.bi-journal-text {
+  color: #6c757d; 
+}
+
+.bi-upload {
+  color: #007bff; 
+}
+
+.bi-check2-square {
+  color: #28a745; 
+}
+
+.bi-pencil-square {
+  color: #fff;
+}

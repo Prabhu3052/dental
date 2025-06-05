@@ -1,0 +1,258 @@
+
+/* ============================= */
+/* -------- Root CSS -------- */
+/* ============================= */
+:root {
+  --primary-color: black;
+  --secondary-color: white;
+  --teritory-color: #0077b6;
+  
+}
+
+/* ============================= */
+/* -------- General CSS -------- */
+/* ============================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0f4f8;
+  color: var(--primary-color);
+  min-height: 100vh;
+}
+
+/* ============================= */
+/* -------- Header CSS -------- */
+/* ============================= */
+.header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: var(--teritory-color);
+  color: var(--secondary-color);
+  box-shadow: 0 2px 4px var(--primary-color);
+}
+
+.hospital_logo_name {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hospital_logo_name img,
+.user_section img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.date_section {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1rem;
+}
+
+.date_time,
+.logout {
+  background-color: var(--secondary-color);
+  color: var(--teritory-color);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+}
+#timePart{
+    color: #e63946; 
+    font-weight: bold;
+}
+/* ============================= */
+/* -------- Main Content CSS -------- */
+/* ============================= */
+
+.main_layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  height: calc(100vh - 100px);
+}
+
+
+/* ============================= */
+/* -------- Menu List CSS -------- */
+/* ============================= */
+
+.sidebar {
+  background-color: var(--secondary-color);
+  border-right: 1px solid #ddd;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.user_section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 2px solid var(--teritory-color);
+}
+
+.menu_list {
+  display: block;
+  width: 100%;
+  background-color: #fff;
+}
+
+.menu_list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 1rem;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menu:hover,
+.menu:focus {
+  background-color: #e0f0ff;
+  color: var(--teritory-color);
+  font-weight: 500;
+  outline: none;
+}
+
+.menu.active {
+  background-color: #e0f0ff;
+  border-left: 5px solid var(--teritory-color);
+  color: var(--teritory-color);
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.menu i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes scaleUp {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.menu i {
+  transition: transform 0.3s ease;
+}
+
+.menu.active i {
+  animation: scaleUp 0.6s ease-in-out infinite;
+  color: #0d6efd; 
+}
+
+/* -------- Menu List Icon Color CSS -------- */
+
+.menu[data-section="dashboard"] i {
+  color: #0d6efd; 
+}
+
+.menu[data-section="patients"] i {
+  color: #20c997; 
+}
+
+.menu[data-section="appointments"] i {
+  color: #fd7e14; 
+}
+
+.menu[data-section="dentist"] i {
+  color: #6f42c1; 
+}
+
+.menu[data-section="treatmentRecords"] i {
+  color: #dc3545; 
+}
+
+.menu[data-section="billing"] i {
+  color: #ffc107;
+}
+
+.menu[data-section="reports"] i {
+  color: #198754; 
+}
+
+.menu[data-section="settings"] i {
+  color: #6c757d; 
+}
+
+.menu[data-section="dashboard"] i {
+  color: #0d6efd; 
+}
+
+.menu[data-section="patients"] i {
+  color: #20c997; 
+}
+
+.menu[data-section="appointments"] i {
+  color: #fd7e14; 
+}
+
+.menu[data-section="dentist"] i {
+  color: #6f42c1; 
+}
+
+.menu[data-section="clinicalnotes"] i {
+  color: #6610f2;
+}
+
+.menu[data-section="treatmentRecords"] i {
+  color: #dc3545; 
+}
+
+.menu[data-section="billing"] i {
+  color: #ffc107;
+}
+
+.menu[data-section="inventory"] i {
+  color: #fdc500;
+}
+
+.menu[data-section="user"] i {
+  color: #0dcaf0;
+}
+
+.menu[data-section="rights"] i {
+  color: #198754;
+}
+
+.menu[data-section="pharmacy"] i {
+  color: #e83e8c;
+}
+
+.menu[data-section="reports"] i {
+  color: #198754; 
+}
+
+.menu[data-section="attendance"] i {
+  color: #0d6efd;
+}
+
+.menu[data-section="settings"] i {
+  color: #6c757d; 
+}

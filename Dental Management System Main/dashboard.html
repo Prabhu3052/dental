@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DashBoard</title>
+    <!-- CSS Connection Link -->
+    <link rel="stylesheet" href="Styles/dashboard.css" />
+    <!-- Bootstrap Connection Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+      crossorigin="anonymous"
+    />
+    <!--  Bootstrap Icon Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!--   Material Design Icon Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  </head>
+  <body>
+
+  </aside>
+        <section id="dashboard" class="content content-section">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+          </ol>
+        </nav>
+    
+        <!-- Tabs -->
+        <ul id="dashboardTabs" class="nav nav-tabs mb-4">
+          <li class="nav-item">
+            <a class="nav-link active" onclick="showDashboardTab('overview', event)" href="#">
+              <i class="fas fa-tachometer-alt me-1"></i> Overview
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="showDashboardTab('patients', event)" href="#">
+              <i class="fas fa-user-injured me-1"></i> Patients
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="showDashboardTab('appointments', event)" href="#">
+              <i class="fas fa-calendar-check me-1"></i> Appointments
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="showDashboardTab('treatments', event)" href="#">
+              <i class="fas fa-teeth me-1"></i> Treatments
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="showDashboardTab('dentists', event)" href="#">
+              <i class="fas fa-user-md me-1"></i> Dentists
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="showDashboardTab('billing', event)" href="#">
+              <i class="fas fa-money-bill-wave"></i> billing
+            </a>
+          </li>
+        </ul>
+    
+         <!-- Overview Tab -->
+    <div id="tab-overview" class="dashboard-tab-content">
+      <div class="row g-4">
+        <!-- Summary Stats -->
+        <div class="col-md-4">
+          <div class="card stat-card primary h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="text-uppercase text-muted mb-1">Total Patients</h6>
+                  <h3 class="mb-0">1,842</h3>
+                </div>
+                <div class="icon-circle bg-primary-light text-primary">
+                  <i class="fas fa-users"></i>
+                </div>
+              </div>
+              <div class="mt-3">
+                <span class="text-success fw-bold">+12.5%</span>
+                <span class="text-muted ms-1">vs last month</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card stat-card success h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="text-uppercase text-muted mb-1">Today's Appointments</h6>
+                  <h3 class="mb-0">24</h3>
+                </div>
+                <div class="icon-circle bg-success-light text-success">
+                  <i class="fas fa-calendar-day"></i>
+                </div>
+              </div>
+              <div class="mt-3">
+                <span class="text-success fw-bold">3</span>
+                <span class="text-muted ms-1">completed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card stat-card warning h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="text-uppercase text-muted mb-1">Active Dentists</h6>
+                  <h3 class="mb-0">6</h3>
+                </div>
+                <div class="icon-circle bg-warning-light text-warning">
+                  <i class="fas fa-user-md"></i>
+                </div>
+              </div>
+              <div class="mt-3">
+                <span class="text-success fw-bold">2</span>
+                <span class="text-muted ms-1">available now</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+
+        <!-- Main Overview Charts -->
+        <div class="col-lg-8">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Monthly Patient Growth</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="overviewChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Appointment Status</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="overviewAppointmentsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-12">
+          <div class="card dashboard-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold">Recent Activity</h6>
+              <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="bg-light">
+                    <tr>
+                      <th>Patient</th>
+                      <th>Activity</th>
+                      <th>Dentist</th>
+                      <th>Time</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>John Smith</td>
+                      <td>Root Canal Treatment</td>
+                      <td>Dr. Patel</td>
+                      <td>10:30 AM</td>
+                      <td><span class="badge bg-success">Completed</span></td>
+                    </tr>
+                    <tr>
+                      <td>Sarah Johnson</td>
+                      <td>Dental Checkup</td>
+                      <td>Dr. Lee</td>
+                      <td>11:15 AM</td>
+                      <td><span class="badge bg-warning">In Progress</span></td>
+                    </tr>
+                    <tr>
+                      <td>Michael Brown</td>
+                      <td>Tooth Extraction</td>
+                      <td>Dr. Garcia</td>
+                      <td>2:00 PM</td>
+                      <td><span class="badge bg-info">Scheduled</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patients Tab -->
+    <div id="tab-patients" class="dashboard-tab-content d-none">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Gender Distribution</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="genderChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Age Groups</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="ageGroupChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="card dashboard-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold">New Patients This Month</h6>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  May 2025
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">April 2025</a></li>
+                  <li><a class="dropdown-item" href="#">March 202</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 300px;">
+                <canvas id="newPatientsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appointments Tab -->
+    <div id="tab-appointments" class="dashboard-tab-content d-none">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Appointment Trends</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="appointmentTrendsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Appointment Status</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="appointmentStatusChart"></canvas>
+              </div>
+              <div class="mt-4">
+                <div class="d-flex justify-content-between mb-1">
+                  <span>Completed</span>
+                  <span>72%</span>
+                </div>
+                <div class="progress progress-thin mb-3">
+                  <div class="progress-bar bg-success" style="width: 72%"></div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-1">
+                  <span>Cancelled</span>
+                  <span>15%</span>
+                </div>
+                <div class="progress progress-thin mb-3">
+                  <div class="progress-bar bg-danger" style="width: 15%"></div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-1">
+                  <span>Rescheduled</span>
+                  <span>13%</span>
+                </div>
+                <div class="progress progress-thin">
+                  <div class="progress-bar bg-warning" style="width: 13%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="card dashboard-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold">Upcoming Appointments</h6>
+              <a href="#" class="btn btn-sm btn-outline-primary">View Calendar</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="bg-light">
+                    <tr>
+                      <th>Patient</th>
+                      <th>Procedure</th>
+                      <th>Dentist</th>
+                      <th>Date & Time</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Emily Wilson</td>
+                      <td>Dental Cleaning</td>
+                      <td>Dr. Smith</td>
+                      <td>Today, 3:30 PM</td>
+                      <td><span class="badge bg-info">Confirmed</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary">View</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Robert Davis</td>
+                      <td>Tooth Filling</td>
+                      <td>Dr. Lee</td>
+                      <td>Tomorrow, 10:00 AM</td>
+                      <td><span class="badge bg-info">Confirmed</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary">View</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Treatments Tab -->
+    <div id="tab-treatments" class="dashboard-tab-content d-none">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Treatments by Type</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="treatmentTypeChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Most Common Treatments</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="commonTreatmentsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Treatments by Age Group</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="treatmentAgeChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="card dashboard-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold">Treatment Revenue</h6>
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-secondary active">Monthly</button>
+                <button class="btn btn-sm btn-outline-secondary">Quarterly</button>
+                <button class="btn btn-sm btn-outline-secondary">Yearly</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 350px;">
+                <canvas id="treatmentRevenueChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dentists Tab -->
+    <div id="tab-dentists" class="dashboard-tab-content d-none">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Appointments per Dentist</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="dentistAppointmentsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card dashboard-card h-100">
+            <div class="card-header bg-white">
+              <h6 class="m-0 font-weight-bold">Dentist Ratings</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="dentistRatingsChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="card dashboard-card">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold">Dentist Availability</h6>
+              <a href="#" class="btn btn-sm btn-outline-primary">Manage Schedule</a>
+            </div>
+            <div class="card-body">
+              <div class="chart-container" style="height: 300px;">
+                <canvas id="dentistAvailabilityChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="tab-billing" class="dashboard-tab-content d-none">
+  <div class="row g-4">
+    <!-- Billing Distribution -->
+    <div class="col-lg-6">
+      <div class="card dashboard-card h-100">
+        <div class="card-header bg-white">
+          <h6 class="m-0 font-weight-bold">Billing Type Distribution</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <canvas id="billingTypeChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Monthly Billing Summary -->
+    <div class="col-lg-6">
+      <div class="card dashboard-card h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <h6 class="m-0 font-weight-bold">Monthly Billing Summary</h6>
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              May 2025
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">April 2025</a></li>
+              <li><a class="dropdown-item" href="#">March 2025</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-container" style="height: 300px;">
+            <canvas id="monthlyBillingChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </section>
+  
+
+
+
+
+
+     <!--   Jvascript Connection Link -->
+    <script src="Script/dashboard.js"></script>
+  <!--   Bootstrap Script Code -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

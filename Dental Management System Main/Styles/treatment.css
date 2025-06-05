@@ -1,0 +1,1069 @@
+
+/* ============================= */
+/* -------- Root CSS -------- */
+/* ============================= */
+:root {
+  --primary-color: black;
+  --secondary-color: white;
+  --teritory-color: #0077b6;
+  
+}
+
+/* ============================= */
+/* -------- General CSS -------- */
+/* ============================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f0f4f8;
+  color: var(--primary-color);
+  height: 100vh;
+}
+
+/* ============================= */
+/* -------- Header CSS -------- */
+/* ============================= */
+.header {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: var(--teritory-color);
+  color: var(--secondary-color);
+  box-shadow: 0 2px 4px var(--primary-color);
+}
+
+.hospital_logo_name {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hospital_logo_name img,
+.user_section img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.date_section {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1rem;
+}
+
+.date_time,
+.logout {
+  background-color: var(--secondary-color);
+  color: var(--teritory-color);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ============================= */
+/* -------- Main Content CSS -------- */
+/* ============================= */
+
+.main_layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  height: calc(100vh - 100px);
+}
+
+/* ============================= */
+/* -------- Menu List CSS -------- */
+/* ============================= */
+
+.sidebar {
+  background-color: var(--secondary-color);
+  border-right: 1px solid #ddd;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.user_section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 2px solid var(--teritory-color);
+}
+
+.menu_list {
+  display: block;
+  width: 100%;
+  background-color: #fff;
+}
+
+.menu_list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 1rem;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menu:hover,
+.menu:focus {
+  background-color: #e0f0ff;
+  color: var(--teritory-color);
+  font-weight: 500;
+  outline: none;
+}
+
+.menu.active {
+  background-color: #e0f0ff;
+  border-left: 5px solid var(--teritory-color);
+  color: var(--teritory-color);
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.menu i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes scaleUp {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.menu i {
+  transition: transform 0.3s ease;
+}
+
+.menu.active i {
+  animation: scaleUp 0.6s ease-in-out infinite;
+  color: #0d6efd; 
+}
+
+/* -------- Menu List Icon Color CSS -------- */
+
+.menu[data-section="dashboard"] i {
+  color: #0d6efd; 
+}
+
+.menu[data-section="patients"] i {
+  color: #20c997; 
+}
+
+.menu[data-section="appointments"] i {
+  color: #fd7e14; 
+}
+
+.menu[data-section="dentist"] i {
+  color: #6f42c1; 
+}
+
+.menu[data-section="treatmentRecords"] i {
+  color: #dc3545; 
+}
+
+.menu[data-section="billing"] i {
+  color: #ffc107;
+}
+
+.menu[data-section="reports"] i {
+  color: #198754; 
+}
+
+.menu[data-section="settings"] i {
+  color: #6c757d; 
+}
+
+/* ============================= */
+/* -------- Breadcrumb CSS -------- */
+/* ============================= */
+
+.breadcrumb{
+  font-weight: bold;
+}
+.breadcrumb a{
+  text-decoration: none;
+  color: var(--teritory-color);
+}
+
+/* ============================= */
+/* -------- Input CSS -------- */
+/* ============================= */
+
+.input-group input:focus {
+  box-shadow: none; 
+  border: 1px solid #e0f0ff;
+}
+.input-group select:focus {
+  box-shadow: none; 
+  border: 1px solid #e0f0ff;
+}
+
+/* -------- Modal Width CSS -------- */
+.custom-modal-width {
+  width: 100%;
+  min-width: 800px; 
+}
+
+
+/* ============================= */
+/* -------- Table CSS -------- */
+/* ============================= */
+
+  .table-wrapper {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to bottom right, #ffffff, #f9f9ff);
+    padding: 20px;
+    margin-top: 30px;
+  }
+
+
+  table.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: transparent;
+  }
+
+  .table thead th {
+    background-color: #e0f0ff;
+    color: var(--teritory-color);
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 12px;
+    border: none;
+  }
+
+  .table tbody td {
+    background-color: white;
+    color: #555;
+    text-align: center;
+    padding: 14px;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .table tbody tr:hover td {
+    background-color: #f0f4ff;
+    transition: 0.3s;
+  }
+
+ 
+  .table thead tr th:first-child {
+    border-top-left-radius: 10px;
+  }
+  .table thead tr th:last-child {
+    border-top-right-radius: 10px;
+  }
+
+/* ============================= */
+/* -------- Content CSS -------- */
+/* ============================= */
+.content {
+  background-color: #f9fbfd;
+  padding: 2rem;
+  display: block;
+}
+
+
+
+/* ============================= */
+/* -------- Accordion CSS -------- */
+/* ============================= */
+.accordion-button {
+  background-color: #e0f0ff;
+  color: #0077b6;
+  font-weight: 600;
+}
+
+
+.modal-dialog{
+  height: 1200px;
+}
+.medical-name{
+  margin: 0px;
+}
+
+/* ============================= */
+/* -------- Buttons CSS -------- */
+/* ============================= */
+
+.add_button , .add_Treatmentbutton , .add_appointment_btn , .add_Dentistbutton , .add_billing_btn{
+    display: flex;
+  justify-content: center;
+  align-items: center;
+   background-color: var(--teritory-color);
+  border: 1px solid var(--teritory-color);
+    color: #fff;
+    transition: transform 150ms, box-shadow 150ms;
+    padding: 4px 10px 4px 10px;
+    font-size: 1.2rem;
+    font-weight: 400;
+     border-radius: 4px;
+     cursor: pointer;
+}
+
+
+#nextBtn , #openEditModalBtn , #editTreatmentBtn , #openAppointmentEditModalBtn , #editDentistBtn , #openBillingEditModalBtn{
+  background-color: var(--teritory-color);
+}
+
+.mdi-delete-clock{
+  font-size: 5rem;
+  color: var(--teritory-color);
+}
+
+#confirmYes{
+  background-color: var(--teritory-color);
+  color: var(--secondary-color);
+}
+
+
+
+/* ============================= */
+/* -------- Icon Color CSS -------- */
+/* ============================= */
+
+.bi-person {
+  color: #0d6efd;
+}
+
+.bi-gender-ambiguous {
+  color: #6610f2; 
+}
+
+.bi-hourglass-split {
+  color: #fd7e14; 
+}
+
+.bi-calendar-event {
+  color: #198754;
+}
+
+.bi-droplet-half {
+  color: #dc3545; 
+}
+
+.bi-shield-check {
+  color: #20c997; 
+}
+
+.bi-shield-exclamation {
+  color: #ffc107; 
+}
+
+.bi-card-heading {
+  color: #6c757d; 
+}
+
+.bi-sort-down {
+  color: #0dcaf0;
+}
+
+.bi-list-ol {
+  color: #6f42c1;
+}
+
+.bi-clipboard-check {
+  color: #198754; 
+}
+
+.bi-hash {
+  color: #6c757d; 
+}
+
+.bi-calendar-check {
+  color: #28a745; 
+}
+
+.bi-calendar-date {
+  color: #ffc107; 
+}
+
+.bi-file-earmark-text {
+  color: #343a40; 
+}
+
+.bi-telephone {
+  color: #007bff; 
+}
+
+.bi-telephone-plus {
+  color: #dc3545; 
+}
+
+.bi-person-heart {
+  color: #e83e8c; 
+}
+
+.bi-exclamation-triangle {
+  color: #dc3545; 
+}
+
+.bi-wind {
+  color: #6c757d; 
+}
+
+.bi-universal-access {
+  color: #17a2b8; 
+}
+
+.bi-shield-plus {
+  color: #28a745; 
+}
+
+.bi-123 {
+  color: #343a40; 
+}
+
+.bi-calendar-range {
+  color: #007bff; 
+}
+
+.bi-journal-text {
+  color: #6c757d; 
+}
+
+.bi-upload {
+  color: #007bff; 
+}
+
+.bi-check2-square {
+  color: #28a745; 
+}
+
+.bi-pencil-square {
+  color: #fff;
+}
+
+
+
+        
+      h1, .tooth-label {
+  text-align: center;
+  color: var(--primary-color);
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.dental-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.upper-jaw, .lower-jaw {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.tooth {
+  width: 25px;
+  height: 25px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+  background: white;
+  position: relative;
+}
+
+.tooth:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+}
+
+.tooth-number {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.tooth-problem {
+  font-size: 9px;
+  color: var(--danger-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 90%;
+  text-align: center;
+  margin-top: 2px;
+}
+.tooth_buttons{
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 1rem;
+  row-gap: 1rem;
+}
+.input-container, .problem-history {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+#problemInput {
+  padding: 10px;
+  width: 350px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  flex-grow: 1;
+}
+
+
+
+
+.selected {
+  background: #fff9c4;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 2px var(--secondary-color);
+}
+
+.has-problem {
+  background: #ffebee;
+  border-color: #ffcdd2;
+}
+
+.problem-history h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.problem-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.problem-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.problem-item:last-child {
+  border-bottom: none;
+}
+
+.problem-text {
+  flex-grow: 1;
+}
+
+.problem-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.problem-time {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.delete-problem {
+  color: var(--danger-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 5px;
+  opacity: 0.7;
+  transition: 0.2s;
+}
+
+.delete-problem:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.no-problems {
+  color: #666;
+  font-style: italic;
+  padding: 20px;
+  text-align: center;
+}
+
+.problem-number {
+  font-weight: bold;
+  margin-right: 8px;
+  color: var(--primary-color);
+  min-width: 25px;
+  display: inline-block;
+}
+
+
+
+
+
+
+ /* Container and layout */
+.container, .info-panel {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.container {
+  max-width: 720px;
+}
+.info-panel {
+  max-width: 320px;
+  font-size: 15px;
+}
+.panel-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+/* Headings */
+h2 {
+  margin-bottom: 15px;
+}
+.info-panel h3, .details-panel h3 {
+  margin: 0 0 10px;
+  color: #333;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+/* Tooth grid styled to look like a mouth */
+.mouth, .teeth-grid {
+  display: grid;
+  grid-template-columns: repeat(16, 40px);
+  gap: 6px;
+  justify-content: center;
+  user-select: none;
+  flex: 1 1 320px;
+}
+
+/* Tooth styling */
+.tooth {
+  position: relative;
+  width: 40px;
+  height: 50px;
+  border-radius: 8px;
+  border: 2px solid #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #222;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+  flex-direction: column;
+}
+.tooth:hover {
+  box-shadow: 0 0 10px #007bff;
+  transform: scale(1.1);
+  z-index: 10;
+}
+.tooth.selected {
+  border-color: #28a745;
+  box-shadow: 0 0 12px #28a745;
+  transform: scale(1.1);
+}
+
+/* Tooth type colors */
+.Incisors { background: #ffd3d3; border-color: #e55353; }
+.Canines  { background: #d3e0ff; border-color: #496fd1; }
+.Premolars { background: #d3ffd9; border-color: #3ba143; }
+.Molars { background: #fff3d3; border-color: #d1aa49; }
+.Wisdom { background: #e2d3ff; border-color: #7a59d1; }
+
+.incisor { background: #ffd3d3; border-color: #e55353; }
+.canine  { background: #d3e0ff; border-color: #496fd1; }
+.premolar { background: #d3ffd9; border-color: #3ba143; }
+.molar { background: #fff3d3; border-color: #d1aa49; }
+.wisdom { background: #e2d3ff; border-color: #7a59d1; }
+
+
+/* Status indicators */
+.status-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #bbb;
+  border: 1px solid #999;
+}
+.status-ongoing {
+  background-color: #ffcc00;
+  box-shadow: 0 0 4px #ffb300;
+}
+.status-completed {
+  background-color: #4caf50;
+  box-shadow: 0 0 4px #388e3c;
+}
+
+/* Tooth number and checkbox */
+.tooth-number {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 10px;
+  color: #444;
+}
+.tooth-checkbox {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  z-index: 15;
+}
+
+/* Tooltip */
+.tooth .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 20;
+  transition: opacity 0.2s;
+}
+.tooth:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Gap between teeth (if needed) */
+.tooth.gap-right {
+  margin-right: 12px;
+}
+
+/* Edit multiple button */
+#editMultipleBtn {
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+  padding: 8px 12px;
+  font-weight: 700;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: none;
+  z-index: 100;
+}
+
+/* Form and input styles */
+form label {
+  display: block;
+  margin: 8px 0 4px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+form input[type="text"],
+form input[type="date"],
+form input[type="time"],
+form select {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+form input:focus,
+form select:focus {
+  border-color: #3a7afe;
+  outline: none;
+}
+
+
+
+
+
+.save-btn, .save-button {
+  background-color: #28a745;
+  color: white;
+}
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+}
+.buttons-area {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* Info rows */
+.info-row, .info-line {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  padding: 4px 0;
+}
+.info-label, .label-text {
+  font-weight: 700;
+  color: #555;
+}
+.info-value, .value-text {
+  color: #222;
+}
+
+/* No tooth selected message */
+#noToothSelected {
+  font-style: italic;
+  color: #666;
+  font-size: 14px;
+  user-select: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.edit-selected-btn{
+  background-color: var(--teritory-color);
+  color: var(--secondary-color);
+  max-width: 200px;
+  border-radius: 5px;
+   padding: 8px 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+
+
+.treatment-chart {
+  display: grid;
+  grid-template-columns: repeat(16, 40px);
+  margin-top: 10px;
+  gap: 6px;
+  row-gap: 12px;
+  justify-content: center;
+  user-select: none;
+}
+
+.treatment-tooth {
+  position: relative;
+  min-width: 40px;
+  height: 55px;
+  border-radius: 8px;
+  border: 2px solid #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #222;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+  flex-direction: column;
+}
+
+
+
+.treatment-tooth:hover {
+  box-shadow: 0 0 10px red;
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.treatment-tooth.selected {
+  border-color: #28a745;
+  box-shadow: 0 0 12px #28a745;
+  transform: scale(1.1);
+}
+
+
+
+
+.treatment-edit-form {
+  margin-top: 12px;
+  padding: 10px;
+ 
+  border-radius: 6px;
+  max-width: 300px;
+  background: #f9f9f9;
+}
+
+.treatment-edit-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.treatment-edit-form textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.treatment-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* Colors for status dots */
+.status-ongoing {
+  background-color: orange;
+}
+
+.status-completed {
+  background-color: green;
+}
+
+.status-no-treatment {
+  background-color: gray;
+}
+
+.status-planned {
+  background-color: blue;
+}
+
+/* Multi select styling */
+.treatment-tooth.multi-selected {
+  border-color: #07ff5a;
+  box-shadow: 0 0 12px #07ff5a;
+}
+
+
+.tooth-type-letter {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ font-weight: bold;
+  font-size: 1rem;
+  color: #666;
+  user-select: none;
+}
+
+.tooth-number {
+  font-size: 10px;
+  user-select: none;
+}
+
+.tooth-tooltip {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.tooltip-top {
+  bottom: 120%;
+}
+
+.tooltip-bottom {
+  top: 120%;
+}
+
+.treatment-tooth:hover .tooth-tooltip {
+  opacity: 1;
+}
+
+
+
+
+/* Optional: Jaw labels */
+.jaw-label {
+  text-align: center;
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: -8px;
+  font-size: 14px;
+  color: #444;
+}

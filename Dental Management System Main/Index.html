@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dental Management</title>
+    <!-- CSS Connection Link -->
+    <link rel="stylesheet" href="Styles/style.css" />
+    <!-- Bootstrap Connection Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+      crossorigin="anonymous"
+    />
+    <!--  Bootstrap Icon Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!--   Material Design Icon Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  </head>
+  <body>
+
+
+    <!--  Header Section -->
+    <header class="header container-fluid">
+      <div class="hospital_logo_name">
+        <!--  Hospital Logo And Heading -->
+        <figure><img src="Images/1631875.jpg" alt="Hospital Logo" /></figure>
+        <h1>Govt Multi Super Speciality Hospital</h1>
+      </div>
+      <!-- Current Date And Time -->
+      <div class="date_section">
+        <div class="date_time" id="currentDateTime">  <span id="datePart"></span><br>
+  <span id="timePart"></span> </div>
+        <div class="logout"> <i class="bi bi-box-arrow-right fs-5"></i><br> Logout</div>
+      </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="main_layout">
+      <aside class="sidebar">
+        <div class="user_section">
+          <figure><img src="Images/9954256.png" alt="User" /></figure>
+          <h5>User</h5>
+        </div>
+        <!-- Hospital Menu -->
+      <nav class="menu_list" role="navigation">
+  <ul>
+    <li class="menu active" data-section="dashboard" tabindex="0">
+      <i class="bi bi-speedometer2 fs-4"></i> <span>Dashboard</span>
+    </li>
+    <li class="menu" data-section="patients" tabindex="0">
+      <i class="bi bi-people-fill fs-4"></i> <span>Patients</span>
+    </li>
+    <li class="menu" data-section="appointments" tabindex="0">
+      <i class="bi bi-calendar-check-fill fs-4"></i> <span>Appointments</span>
+    </li>
+    <li class="menu" data-section="dentist" tabindex="0">
+      <i class="bi bi-person-badge-fill fs-4"></i> <span>Dentists</span>
+    </li>
+    <li class="menu" data-section="clinicalnotes" tabindex="0">
+              <i class="bi bi-journal-medical fs-5 text-primary"></i> <span>Clinical Notes</span>
+            </li>
+    <li class="menu" data-section="treatmentRecords" tabindex="0">
+      <i class="bi bi-journal-medical fs-4"></i> <span>Treatment Records</span>
+    </li>
+    <li class="menu" data-section="billing" tabindex="0">
+      <i class="bi bi-receipt-cutoff fs-4"></i> <span>Billing</span>
+    </li>
+    <li class="menu" data-section="inventory" tabindex="0">
+              <i class="bi bi-box-seam fs-5 text-warning"></i> <span>Inventory Management</span>
+            </li>
+    <li class="menu" data-section="user" tabindex="0">
+      <i class="bi bi-person-gear fs-4"></i> <span>User Management</span>
+    </li>
+    <li class="menu" data-section="rights" tabindex="0">
+              <i class="bi bi-shield-lock-fill fs-4"></i>
+              <span>Rights Management</span>
+            </li>
+    <li class="menu" data-section="pharmacy" tabindex="0">
+              <i class="bi bi-capsule"></i>
+              <span>Pharmacy</span>
+            </li>
+    <li class="menu" data-section="report" tabindex="0">
+      <i class="bi bi-bar-chart-fill fs-4"></i> <span>Reports</span>
+    </li>
+    <li class="menu" data-section="attendance" tabindex="0">
+              <i class="bi bi-calendar-check-fill fs-4"></i> <span>Attendance</span>
+            </li>
+    <li class="menu" data-section="settings" tabindex="0">
+      <i class="bi bi-gear-fill fs-4"></i> <span>Settings</span>
+    </li>
+  </ul>
+</nav>
+
+</main>
+
+
+
+
+
+     <!--   Jvascript Connection Link -->
+    <script src="Script/script.js"></script>
+  <!--   Bootstrap Script Code -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

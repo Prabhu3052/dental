@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>clinicalnotes</title>
+    <!-- CSS Connection Link -->
+    <link rel="stylesheet" href="Styles/clinicalNotes.css" />
+    <!-- Bootstrap Connection Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+      crossorigin="anonymous"
+    />
+    <!--  Bootstrap Icon Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!--   Material Design Icon Link -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  </head>
+  <body>
+
+    
+
+      <!-- Clinical Notes -->
+      <section id="clinicalnotes" class="content content-section">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#" id="breadcrumb-dashboard">Dashboard</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><b>Clinical Notes</b></li>
+    </ol>
+  </nav>
+
+  <!-- Add Note -->
+  <div class="card p-3 mb-4">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label for="noteDate" class="form-label">Date</label>
+        <input type="date" id="noteDate" class="form-control" />
+      </div>
+      <div class="col-md-3">
+        <label for="noteCategory" class="form-label">Category</label>
+        <select id="noteCategory" class="form-select">
+          <option>Diagnosis</option>
+          <option>Treatment Plan</option>
+          <option>Prescription</option>
+          <option>Procedure</option>
+          <option>Follow-up</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="notePatient" class="form-label">Patient Name</label>
+        <input type="text" id="notePatient" class="form-control" placeholder="Optional" />
+      </div>
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-success w-100" onclick="addClinicalNote()">
+          <i class="bi bi-plus-circle me-1"></i> Add Note
+        </button>
+      </div>
+      <div class="col-12">
+        <label for="noteText" class="form-label">Note</label>
+        <textarea id="noteText" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Filter -->
+  <div class="mb-3">
+    <input type="text" id="noteSearch" class="form-control" placeholder="Search by patient, category, or content..." onkeyup="renderClinicalNotes()" />
+  </div>
+
+  <!-- Notes Table -->
+  <div>
+    <h5 class="mb-3">Saved Notes</h5>
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Patient</th>
+          <th>Note</th>
+          <th>Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="clinicalNotesTable"></tbody>
+    </table>
+  </div>
+</section>
+
+
+     <!--   Jvascript Connection Link -->
+    <script src="Script/clinicalNotes.js"></script>
+  <!--   Bootstrap Script Code -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
